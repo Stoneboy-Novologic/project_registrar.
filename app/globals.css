@@ -1,26 +1,243 @@
+/* app/globals.css */
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1f2937;
+  
+  /* Construction Industry Color Palette */
+  --construction-orange: #FF6B35;
+  --construction-yellow: #FDB44B;
+  --construction-charcoal: #2C3E50;
+  --construction-concrete: #34495E;
+  --construction-steel: #4A5568;
+  --construction-light: #E5E7EB;
+  --construction-warning: #FF8C42;
+  
+  /* Report-specific CSS variables matching construction theme */
+  --report-bg: #ffffff;
+  --report-fg: #1f2937;
+  --report-muted: #6b7280;
+  --brand-primary: #1e40af;
+  --report-badge-bg: #f0f9ff;
+  --report-badge-text: #1e40af;
+  --report-badge-border: #bfdbfe;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0f172a;
+    --foreground: #f1f5f9;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Report Font Class */
+.report-font {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Professional Input Styling - Construction Theme */
+.professional-input {
+  @apply w-full rounded-lg border px-4 py-3 text-sm font-medium outline-none transition-all duration-200;
+  background: var(--construction-charcoal);
+  border-color: var(--construction-steel);
+  color: var(--construction-light);
+}
+
+.professional-input::placeholder {
+  color: var(--construction-steel);
+}
+
+.professional-input:focus {
+  border-color: var(--construction-orange);
+  box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.2);
+}
+
+.professional-input:hover {
+  border-color: var(--construction-warning);
+}
+
+.professional-input:disabled {
+  background: var(--construction-concrete);
+  color: var(--construction-steel);
+  cursor: not-allowed;
+}
+
+/* Construction-themed Button Classes */
+.construction-btn-primary {
+  background: var(--construction-orange);
+  color: white;
+  border: 1px solid var(--construction-orange);
+  transition: all 0.2s ease;
+}
+
+.construction-btn-primary:hover {
+  background: var(--construction-warning);
+  border-color: var(--construction-warning);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.construction-btn-secondary {
+  background: var(--construction-steel);
+  border: 1px solid var(--construction-orange);
+  color: var(--construction-light);
+  transition: all 0.2s ease;
+}
+
+.construction-btn-secondary:hover {
+  background: var(--construction-concrete);
+  border-color: var(--construction-warning);
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.2);
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Keyframe Animations */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes slideIn {
+  from { 
+    opacity: 0; 
+    transform: translateX(-20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateX(0); 
+  }
+}
+
+@keyframes slideInUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes successCheckmark {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+  20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 0 rgba(255, 107, 53, 0); }
+  50% { box-shadow: 0 0 8px rgba(255, 107, 53, 0.3); }
+}
+
+/* Animation Classes */
+.construction-pulse {
+  animation: pulse 2s infinite;
+}
+
+.construction-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+.construction-slide-in-up {
+  animation: slideInUp 0.3s ease-out;
+}
+
+.construction-success {
+  animation: successCheckmark 0.5s ease-out;
+}
+
+.construction-shake {
+  animation: shake 0.5s ease-out;
+}
+
+.construction-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.construction-glow {
+  animation: glow 1s ease-in-out;
+}
+
+/* Construction Patterns and Textures */
+.construction-divider {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--construction-orange),
+    var(--construction-orange) 10px,
+    var(--construction-yellow) 10px,
+    var(--construction-yellow) 20px
+  );
+  height: 2px;
+}
+
+.construction-badge {
+  background: var(--construction-orange);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.construction-tooltip {
+  background: var(--construction-charcoal);
+  color: var(--construction-light);
+  border: 1px solid var(--construction-orange);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.875rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Custom scrollbar styling - Construction Theme */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--construction-concrete);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--construction-orange);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--construction-warning);
 }

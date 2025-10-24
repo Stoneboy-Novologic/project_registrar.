@@ -1,0 +1,37 @@
+{
+  "pageId": "report-01",
+  "title": "Project Register",
+  "fields": [
+    { "id": "header.breadcrumb", "label": "Breadcrumb", "type": "text", "placeholder": "Engineering > Infrastructure > Watermain Projects", "helpText": "Navigation path showing document hierarchy", "required": true },
+    { "id": "header.badge", "label": "Badge", "type": "badge", "placeholder": "CONSTRUCTION PHASE", "helpText": "Current project phase status", "required": true },
+
+    { "id": "title.main", "label": "Main Title", "type": "text", "placeholder": "Brampton Watermain Replacement Project", "helpText": "Official project name as it appears in contracts", "required": true },
+    { "id": "title.projectNos", "label": "Project Numbers", "type": "text", "placeholder": "ENG-2025-001, PW-2025-042", "helpText": "All associated project reference numbers", "required": true },
+    { "id": "title.pageTitle", "label": "Page Title", "type": "text", "placeholder": "Project Status Report", "helpText": "Specific title for this document page", "required": true },
+
+    { "id": "submittedTo.org", "label": "Submitted To - Org", "type": "text", "placeholder": "City of Brampton", "helpText": "Organization receiving this report", "required": true },
+    { "id": "submittedTo.department", "label": "Submitted To - Dept", "type": "text", "placeholder": "Engineering Department", "helpText": "Specific department within the organization" },
+    { "id": "submittedTo.address", "label": "Submitted To - Address", "type": "multiline", "placeholder": "2 Wellington Street West\nBrampton, ON L6Y 4R2", "helpText": "Complete mailing address for the recipient" },
+    { "id": "submittedTo.website", "label": "Submitted To - Website", "type": "link", "placeholder": "https://www.brampton.ca/engineering", "helpText": "Official website URL for the organization" },
+
+    { "id": "consultant.name", "label": "Consultant - Name", "type": "text", "placeholder": "AECOM Canada Ltd.", "helpText": "Primary consulting firm name", "required": true },
+    { "id": "consultant.address", "label": "Consultant - Address", "type": "multiline", "placeholder": "2001 Sheppard Avenue East\nSuite 300, Toronto, ON M2J 4Z8", "helpText": "Consultant's business address" },
+    { "id": "consultant.website", "label": "Consultant - Website", "type": "link", "placeholder": "https://www.aecom.com", "helpText": "Consultant's official website" },
+
+    { "id": "preparedFor.name", "label": "Prepared For - Name", "type": "text", "placeholder": "City of Brampton Engineering", "helpText": "Client organization name", "required": true },
+    { "id": "preparedFor.address", "label": "Prepared For - Address", "type": "multiline", "placeholder": "2 Wellington Street West\nBrampton, ON L6Y 4R2", "helpText": "Client's business address" },
+    { "id": "preparedFor.website", "label": "Prepared For - Website", "type": "link", "placeholder": "https://www.brampton.ca", "helpText": "Client's official website" },
+
+    { "id": "preparedBy.name", "label": "Prepared By - Name", "type": "text", "placeholder": "AECOM Engineering Team", "helpText": "Team or individual who prepared this report", "required": true },
+    { "id": "preparedBy.address", "label": "Prepared By - Address", "type": "multiline", "placeholder": "2001 Sheppard Avenue East\nSuite 300, Toronto, ON M2J 4Z8", "helpText": "Preparer's business address" },
+    { "id": "preparedBy.website", "label": "Prepared By - Website", "type": "link", "placeholder": "https://www.aecom.com", "helpText": "Preparer's official website" },
+
+    { "id": "document.number", "label": "Document Number", "type": "text", "placeholder": "ENG-2025-001-REV-02", "helpText": "Unique document identifier with revision", "required": true },
+    { "id": "document.date", "label": "Document Date", "type": "date", "placeholder": "2025-01-15", "helpText": "Date this document was prepared", "required": true },
+    { "id": "document.legal", "label": "Legal Footer", "type": "text", "placeholder": "This report is prepared in accordance with Ontario Building Code and Municipal Engineering Standards. All work performed under Professional Engineer supervision.", "helpText": "Legal disclaimer and compliance statement" },
+
+    { "id": "map.image", "label": "Project Map Image", "type": "image", "placeholder": "/brampton-watermain-project-map.jpg", "helpText": "URL or path to project location map image" }
+  ]
+}
+
+

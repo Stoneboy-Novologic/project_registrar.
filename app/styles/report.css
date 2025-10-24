@@ -1,0 +1,34 @@
+/* app/styles/report.css */
+:root {
+  --report-bg: #ffffff;
+  --report-fg: #111827;
+  --report-muted: #6b7280;
+  --brand-primary: #374EB3;
+
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  --page-width: 210mm;
+  --page-height: 297mm;
+}
+
+.report-font {
+  font-family: var(--font-poppins), system-ui, -apple-system, Segoe UI, Roboto,
+    Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
+
+

@@ -1,0 +1,17 @@
+{
+  "pageId": "report-02",
+  "title": "Hello World Report",
+  "fields": [
+    { "id": "header.title", "label": "Report Title", "type": "text", "placeholder": "Hello World Report", "helpText": "Main title for this report page", "required": true },
+    { "id": "header.subtitle", "label": "Subtitle", "type": "text", "placeholder": "A Simple Placeholder Template", "helpText": "Subtitle or description of the report" },
+    { "id": "header.date", "label": "Report Date", "type": "date", "placeholder": "2025-01-15", "helpText": "Date when this report was created", "required": true },
+    
+    { "id": "content.greeting", "label": "Greeting Message", "type": "text", "placeholder": "Hello, Stoneboy!", "helpText": "Welcome message or greeting", "required": true },
+    { "id": "content.description", "label": "Description", "type": "multiline", "placeholder": "This is a simple placeholder template for Report-02.\nWe will build this into a proper component later.", "helpText": "Detailed description of the report content" },
+    { "id": "content.status", "label": "Status", "type": "badge", "placeholder": "PLACEHOLDER", "helpText": "Current status or phase of the project" },
+    
+    { "id": "footer.author", "label": "Author", "type": "text", "placeholder": "Development Team", "helpText": "Name of the person or team who created this report" },
+    { "id": "footer.version", "label": "Version", "type": "text", "placeholder": "v1.0.0", "helpText": "Version number of this report template" },
+    { "id": "footer.notes", "label": "Notes", "type": "multiline", "placeholder": "This template will be expanded with proper fields and layout in future iterations.", "helpText": "Additional notes or comments about this report" }
+  ]
+}

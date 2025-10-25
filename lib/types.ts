@@ -2,7 +2,7 @@
 // Types for the image-backed report editor
 // These types are designed to be explicit and readable to future maintainers
 
-export type FieldType = "text" | "multiline" | "link" | "date" | "badge" | "image";
+export type FieldType = "text" | "multiline" | "link" | "date" | "badge" | "image" | "attachments" | "authors" | "contents";
 
 export interface TemplateField {
   // Unique dotted path id, also used for value map keys

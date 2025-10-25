@@ -5,8 +5,16 @@ import { z } from "zod";
 export const TemplateFieldSchema = z.object({
   id: z.string().min(1),
   label: z.string().min(1),
-  type: z.enum(["text", "multiline", "link", "date", "badge", "image"]),
+  type: z.enum(["text", "multiline", "link", "date", "badge", "image", "attachments", "authors", "contents"]),
   placeholder: z.string().optional(),
+  helpText: z.string().optional(),
+  required: z.boolean().optional(),
+  validation: z.object({
+    pattern: z.string().optional(),
+    minLength: z.number().optional(),
+    maxLength: z.number().optional(),
+    message: z.string().optional(),
+  }).optional(),
 });
 
 export const ReportTemplateSchema = z.object({

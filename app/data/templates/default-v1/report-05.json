@@ -1,0 +1,53 @@
+{
+  "pageId": "report-05",
+  "title": "Project Overview & Stakeholders",
+  "fields": [
+    { "id": "header.region", "label": "Region", "type": "text", "placeholder": "Region of Peel", "helpText": "Organization or region name", "required": true },
+    { "id": "header.projectInfo", "label": "Project Info", "type": "text", "placeholder": "EBW-CI (East Brampton Watermain - Contract 1) | Project No. 14-1240, 14-1256, and 14-1257", "helpText": "Project name and reference numbers", "required": true },
+    { "id": "header.badge", "label": "Badge", "type": "badge", "placeholder": "Stoneboy", "helpText": "Company or organization badge", "required": true },
+
+    { "id": "overview.paragraph1", "label": "Overview Paragraph 1", "type": "multiline", "placeholder": "This <strong>Project Register</strong> document has been prepared for C&M McNally for the <strong>East Brampton Watermain - Contract I (Region of Peel Project No. 14-1240, 14-1256, and 14-1257)</strong>. Henceforth, this project is referred to as <strong>EBW-CI</strong> in this document.", "helpText": "First introduction paragraph (HTML formatting supported)", "required": true },
+    
+    { "id": "overview.paragraph2", "label": "Overview Paragraph 2", "type": "multiline", "placeholder": "This document includes submissions pertaining to project schedule in accordance with Schedule Specifications, Special Provisions and Instruction to Bidders (<em>Document 2023-104T, Division 01, Section 01310 - Project Planning, Scheduling and Progress Reporting</em>). This document comprises schedule print layouts for the baseline schedule (data date 2024-09-16), narrative for baseline schedule, as well as reference data for project controls.", "helpText": "Second introduction paragraph (HTML formatting supported)", "required": true },
+    
+    { "id": "overview.paragraph3", "label": "Overview Paragraph 3", "type": "multiline", "placeholder": "A select list of project stakeholders is provided in the following table. Please see a Detailed List of Project Stakeholders in <strong>Section 6 - Project Scope</strong>.", "helpText": "Third introduction paragraph (HTML formatting supported)", "required": true },
+
+    { "id": "stakeholder1.org", "label": "Stakeholder 1 - Organization", "type": "text", "placeholder": "Region of Peel", "helpText": "First stakeholder organization name", "required": true },
+    { "id": "stakeholder1.website", "label": "Stakeholder 1 - Website", "type": "link", "placeholder": "www.peelregion.ca", "helpText": "Organization website (without https://)" },
+    { "id": "stakeholder1.role", "label": "Stakeholder 1 - Role", "type": "text", "placeholder": "Project Owner", "helpText": "Role in the project", "required": true },
+    { "id": "stakeholder1.projectNo", "label": "Stakeholder 1 - Project Number", "type": "text", "placeholder": "14-1240, 14-1256, and 14-1257", "helpText": "Project number at organization" },
+
+    { "id": "stakeholder2.org", "label": "Stakeholder 2 - Organization", "type": "text", "placeholder": "Jacobs", "helpText": "Second stakeholder organization name", "required": true },
+    { "id": "stakeholder2.website", "label": "Stakeholder 2 - Website", "type": "link", "placeholder": "www.jacobs.com", "helpText": "Organization website (without https://)" },
+    { "id": "stakeholder2.role", "label": "Stakeholder 2 - Role", "type": "text", "placeholder": "Contract Administrator, Designer", "helpText": "Role in the project", "required": true },
+    { "id": "stakeholder2.projectNo", "label": "Stakeholder 2 - Project Number", "type": "text", "placeholder": "665287CH", "helpText": "Project number at organization" },
+
+    { "id": "stakeholder3.org", "label": "Stakeholder 3 - Organization", "type": "text", "placeholder": "C&M McNally Engineering Corp. (C&M)", "helpText": "Third stakeholder organization name", "required": true },
+    { "id": "stakeholder3.website", "label": "Stakeholder 3 - Website", "type": "link", "placeholder": "www.mcnally.ca", "helpText": "Organization website (without https://)" },
+    { "id": "stakeholder3.role", "label": "Stakeholder 3 - Role", "type": "text", "placeholder": "Vendor (General Contractor) for EBW-CI", "helpText": "Role in the project", "required": true },
+    { "id": "stakeholder3.projectNo", "label": "Stakeholder 3 - Project Number", "type": "text", "placeholder": "J117", "helpText": "Project number at organization" },
+
+    { "id": "stakeholder4.org", "label": "Stakeholder 4 - Organization", "type": "text", "placeholder": "Erritt Construction", "helpText": "Fourth stakeholder organization name", "required": true },
+    { "id": "stakeholder4.website", "label": "Stakeholder 4 - Website", "type": "link", "placeholder": "", "helpText": "Organization website (leave empty if none)" },
+    { "id": "stakeholder4.role", "label": "Stakeholder 4 - Role", "type": "text", "placeholder": "Subcontractor", "helpText": "Role in the project", "required": true },
+    { "id": "stakeholder4.projectNo", "label": "Stakeholder 4 - Project Number", "type": "text", "placeholder": "", "helpText": "Project number at organization (leave empty if none)" },
+
+    { "id": "stakeholder5.org", "label": "Stakeholder 5 - Organization", "type": "text", "placeholder": "Clearway", "helpText": "Fifth stakeholder organization name", "required": true },
+    { "id": "stakeholder5.website", "label": "Stakeholder 5 - Website", "type": "link", "placeholder": "", "helpText": "Organization website (leave empty if none)" },
+    { "id": "stakeholder5.role", "label": "Stakeholder 5 - Role", "type": "text", "placeholder": "Subcontractor", "helpText": "Role in the project", "required": true },
+    { "id": "stakeholder5.projectNo", "label": "Stakeholder 5 - Project Number", "type": "text", "placeholder": "", "helpText": "Project number at organization (leave empty if none)" },
+
+    { "id": "stakeholder6.org", "label": "Stakeholder 6 - Organization", "type": "text", "placeholder": "Stoneboy", "helpText": "Sixth stakeholder organization name", "required": true },
+    { "id": "stakeholder6.website", "label": "Stakeholder 6 - Website", "type": "link", "placeholder": "www.stoneboy.co", "helpText": "Organization website (without https://)" },
+    { "id": "stakeholder6.role", "label": "Stakeholder 6 - Role", "type": "text", "placeholder": "Vendor's Consultant for Scheduling & Project Controls", "helpText": "Role in the project", "required": true },
+    { "id": "stakeholder6.projectNo", "label": "Stakeholder 6 - Project Number", "type": "text", "placeholder": "SDG32.1", "helpText": "Project number at organization" },
+
+    { "id": "contractSummary.bullet1", "label": "Contract Summary - Bullet 1", "type": "multiline", "placeholder": "The East Brampton Watermain Contract I (EBW-CI) will include the installation of approximately 2.80 km of twinned 1050mm / 900mm and 1500mm watermains (WM) along Dixie Road, between Clark Blvd and North Park Drive in the City of Brampton (from Site 6 to Site 12).", "helpText": "First contract summary bullet point", "required": true },
+    
+    { "id": "contractSummary.bullet2", "label": "Contract Summary - Bullet 2", "type": "multiline", "placeholder": "The proposed twin watermains will be constructed using trenchless methods. The tunnel between Shaft 6 and Shaft 9 is proposed to be a single large diameter tunnel with two watermain pipes installed inside. The single large tunnel will be constructed at a depth between approximately 24 to 29 meters below grade, and will entirely be in the rock.", "helpText": "Second contract summary bullet point", "required": true },
+    
+    { "id": "contractSummary.bullet3", "label": "Contract Summary - Bullet 3", "type": "multiline", "placeholder": "North of Shaft 9, two tunnels will be constructed at an average depth of seven (07) to thirteen (13) meters below grade which will be within overburden. A 134m long tunnel with 1500mm WM will connect the works on Dixie Road to the East Brampton Pump Station (from Shaft 10 to Shaft 11).", "helpText": "Third contract summary bullet point", "required": true },
+    
+    { "id": "contractSummary.bullet4", "label": "Contract Summary - Bullet 4", "type": "multiline", "placeholder": "The 900mm WM will extend for approximately 160m north of Shaft 10 via open cut towards North Park Drive. A connection from the 1050mm WM will extend west from Dixie Road for connection at Shaft 9c along Williams Parkway for approximately 125m via a single tunnel.", "helpText": "Fourth contract summary bullet point", "required": true }
+  ]
+}

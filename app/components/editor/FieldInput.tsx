@@ -2,8 +2,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import clsx from "clsx";
 import { TemplateField } from "@/lib/types";
 import { useEditorStore } from "@/lib/store";
+import AttachmentsInput from "./AttachmentsInput";
+import AuthorsInput from "./AuthorsInput";
+import ContentsInput from "./ContentsInput";
 
 interface Props {
   field: TemplateField;
@@ -145,6 +149,36 @@ export default function FieldInput({ field }: Props) {
             </div>
           )}
         </div>
+      );
+    }
+    if (field.type === "attachments") {
+      return (
+        <AttachmentsInput
+          value={value}
+          onChange={(newValue) => update(field.id, newValue)}
+          className={common.className}
+          placeholder={field.placeholder}
+        />
+      );
+    }
+    if (field.type === "authors") {
+      return (
+        <AuthorsInput
+          value={value}
+          onChange={(newValue) => update(field.id, newValue)}
+          className={common.className}
+          placeholder={field.placeholder}
+        />
+      );
+    }
+    if (field.type === "contents") {
+      return (
+        <ContentsInput
+          value={value}
+          onChange={(newValue) => update(field.id, newValue)}
+          className={common.className}
+          placeholder={field.placeholder}
+        />
       );
     }
     return <input type="text" {...(common as any)} />;

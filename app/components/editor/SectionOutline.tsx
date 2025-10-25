@@ -4,6 +4,9 @@
 import { useEditorStore } from "@/lib/store";
 import templateJson01 from "@/app/data/templates/default-v1/report-01.json";
 import templateJson02 from "@/app/data/templates/default-v1/report-02.json";
+import templateJson03 from "@/app/data/templates/default-v1/report-03.json";
+import templateJson04 from "@/app/data/templates/default-v1/report-04.json";
+import templateJson05 from "@/app/data/templates/default-v1/report-05.json";
 import { ReportTemplateSchema } from "@/lib/validation";
 import { logInfo } from "@/lib/log";
 
@@ -38,6 +41,24 @@ export default function SectionOutline() {
       title: "Page 2: Hello World",
       description: "Simple placeholder template",
       template: templateJson02
+    },
+    {
+      id: "report-03",
+      title: "Page 3: Table of Contents & Attachments",
+      description: "Document index with attachments and authors",
+      template: templateJson03
+    },
+    {
+      id: "report-04",
+      title: "Page 4: Contents Continuation",
+      description: "Additional table of contents entries",
+      template: templateJson04
+    },
+    {
+      id: "report-05",
+      title: "Page 5: Project Overview & Stakeholders",
+      description: "Overview section with stakeholder table and contract summary",
+      template: templateJson05
     }
   ];
 

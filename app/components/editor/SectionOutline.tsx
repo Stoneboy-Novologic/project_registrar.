@@ -1,6 +1,7 @@
 /* app/components/editor/SectionOutline.tsx */
 "use client";
 
+import { useState } from "react";
 import { useEditorStore } from "@/lib/store";
 import templateJson01 from "@/app/data/templates/default-v1/report-01.json";
 import templateJson02 from "@/app/data/templates/default-v1/report-02.json";
@@ -9,8 +10,18 @@ import templateJson04 from "@/app/data/templates/default-v1/report-04.json";
 import templateJson05 from "@/app/data/templates/default-v1/report-05.json";
 import { ReportTemplateSchema } from "@/lib/validation";
 import { logInfo } from "@/lib/log";
+import { motion, AnimatePresence } from "motion/react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 
 export default function SectionOutline() {
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
+    pages: true,
+    fields: true,
+  });
+
+  const toggleSection = (section: string) => {
+    setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
+  };
   const template = useEditorStore((s) => s.template);
   const activePageId = useEditorStore((s) => s.activePageId);
   const loadTemplate = useEditorStore((s) => s.loadTemplate);
@@ -72,12 +83,33 @@ export default function SectionOutline() {
 
   return (
     <div className="p-4 space-y-4">
+      {/* Document Pages Section */}
       <div className="space-y-3">
-        <div className="text-xs font-medium uppercase tracking-wide font-semibold" style={{ color: 'var(--construction-yellow)' }}>
-          Document Pages
-        </div>
-        <div className="space-y-2">
-          {pages.map((page) => {
+        <button
+          onClick={() => toggleSection('pages')}
+          className="flex items-center justify-between w-full text-left"
+        >
+          <div className="text-xs font-medium uppercase tracking-wide font-semibold" style={{ color: 'var(--construction-yellow)' }}>
+            Document Pages
+          </div>
+          {openSections.pages ? (
+            <ChevronDown className="w-4 h-4" style={{ color: 'var(--construction-yellow)' }} />
+          ) : (
+            <ChevronRight className="w-4 h-4" style={{ color: 'var(--construction-yellow)' }} />
+          )}
+        </button>
+        
+        <AnimatePresence initial={false}>
+          {openSections.pages && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              style={{ overflow: "hidden" }}
+            >
+              <div className="space-y-2">
+                {pages.map((page) => {
             const isActive = activePageId === page.id;
             return (
               <button
@@ -109,18 +141,41 @@ export default function SectionOutline() {
                   </div>
                 </div>
               </button>
-            );
-          })}
-        </div>
+              );
+            })}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
       
       {/* Current Page Field Groups */}
       <div className="space-y-3">
-        <div className="text-xs font-medium uppercase tracking-wide font-semibold" style={{ color: 'var(--construction-yellow)' }}>
-          Current Page Fields
-        </div>
-        <div className="space-y-2">
-          {Array.from(new Set(template.fields.map(f => f.id.split('.')[0]))).map(group => (
+        <button
+          onClick={() => toggleSection('fields')}
+          className="flex items-center justify-between w-full text-left"
+        >
+          <div className="text-xs font-medium uppercase tracking-wide font-semibold" style={{ color: 'var(--construction-yellow)' }}>
+            Current Page Fields
+          </div>
+          {openSections.fields ? (
+            <ChevronDown className="w-4 h-4" style={{ color: 'var(--construction-yellow)' }} />
+          ) : (
+            <ChevronRight className="w-4 h-4" style={{ color: 'var(--construction-yellow)' }} />
+          )}
+        </button>
+        
+        <AnimatePresence initial={false}>
+          {openSections.fields && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              style={{ overflow: "hidden" }}
+            >
+              <div className="space-y-2">
+                {Array.from(new Set(template.fields.map(f => f.id.split('.')[0]))).map(group => (
             <div key={group} className="px-3 py-2 rounded border" style={{
               backgroundColor: 'var(--construction-concrete)',
               borderColor: 'var(--construction-orange)',
@@ -133,8 +188,11 @@ export default function SectionOutline() {
                 {template.fields.filter(f => f.id.startsWith(group)).length} fields
               </div>
             </div>
-          ))}
-        </div>
+              ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

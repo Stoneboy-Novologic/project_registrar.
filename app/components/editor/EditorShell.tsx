@@ -1,7 +1,7 @@
 /* app/components/editor/EditorShell.tsx */
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useEditorStore } from "@/lib/store";
 import { ReportTemplate } from "@/lib/types";
 import { ReportTemplateSchema } from "@/lib/validation";
@@ -14,16 +14,27 @@ import PagePreview from "./PagePreview";
 
 export default function EditorShell() {
   const loadTemplate = useEditorStore((s) => s.loadTemplate);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true); // Start collapsed for auto-hover behavior
+  const [isManuallyExpanded, setIsManuallyExpanded] = useState(false); // Track if user manually expanded
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Load sidebar state from localStorage on mount
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('editor-sidebar-collapsed');
-      if (saved !== null) {
-        setSidebarCollapsed(JSON.parse(saved));
-        logInfo("Sidebar state loaded from localStorage", { collapsed: JSON.parse(saved) });
+      const savedCollapsed = localStorage.getItem('editor-sidebar-collapsed');
+      const savedManuallyExpanded = localStorage.getItem('editor-sidebar-manually-expanded');
+      
+      if (savedCollapsed !== null) {
+        setSidebarCollapsed(JSON.parse(savedCollapsed));
       }
+      if (savedManuallyExpanded !== null) {
+        setIsManuallyExpanded(JSON.parse(savedManuallyExpanded));
+      }
+      
+      logInfo("Sidebar state loaded from localStorage", { 
+        collapsed: savedCollapsed ? JSON.parse(savedCollapsed) : null,
+        manuallyExpanded: savedManuallyExpanded ? JSON.parse(savedManuallyExpanded) : null
+      });
     } catch (e) {
       logError("Failed to load sidebar state from localStorage", e);
     }
@@ -33,15 +44,52 @@ export default function EditorShell() {
   useEffect(() => {
     try {
       localStorage.setItem('editor-sidebar-collapsed', JSON.stringify(sidebarCollapsed));
-      logInfo("Sidebar state saved to localStorage", { collapsed: sidebarCollapsed });
+      localStorage.setItem('editor-sidebar-manually-expanded', JSON.stringify(isManuallyExpanded));
+      logInfo("Sidebar state saved to localStorage", { collapsed: sidebarCollapsed, manuallyExpanded: isManuallyExpanded });
     } catch (e) {
       logError("Failed to save sidebar state to localStorage", e);
     }
-  }, [sidebarCollapsed]);
+  }, [sidebarCollapsed, isManuallyExpanded]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed);
+    setIsManuallyExpanded(!sidebarCollapsed); // If manually expanding, mark it
     logInfo("Sidebar toggled", { collapsed: !sidebarCollapsed });
+  };
+
+  // Auto-expand on hover, auto-collapse on mouse leave (unless manually expanded)
+  const handleMouseEnter = () => {
+    // Clear any pending collapse
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    
+    // Immediately expand if collapsed
+    if (sidebarCollapsed) {
+      setSidebarCollapsed(false);
+      logInfo("Sidebar auto-expanded on hover");
+    }
+  };
+
+  const handleMouseLeave = () => {
+    // Don't collapse if manually expanded
+    if (isManuallyExpanded) return;
+    
+    // Collapse immediately - the CSS transition will handle the animation
+    if (!sidebarCollapsed) {
+      setSidebarCollapsed(true);
+      logInfo("Sidebar auto-collapsed on mouse leave");
+    }
   };
 
   useEffect(() => {
@@ -66,9 +114,12 @@ export default function EditorShell() {
   }, [loadTemplate]);
 
   return (
-    <div className={`h-screen w-full grid grid-rows-[64px_1fr] transition-all duration-200 ${
-      sidebarCollapsed ? 'grid-cols-[40px_350px_1fr]' : 'grid-cols-[280px_350px_1fr]'
-    }`}>
+    <div className="h-screen w-full grid grid-rows-[64px_1fr]" style={{
+      gridTemplateColumns: sidebarCollapsed 
+        ? '40px 350px 1fr' 
+        : '280px 350px 1fr',
+      transition: 'grid-template-columns 300ms ease-in-out'
+    }}>
       {/* Professional Header */}
       <div className="col-span-3 border-b flex items-center justify-between px-6 backdrop-blur-sm shadow-lg" style={{
         background: 'linear-gradient(to right, var(--construction-charcoal), var(--construction-concrete), var(--construction-charcoal))',
@@ -89,12 +140,18 @@ export default function EditorShell() {
       </div>
       
       {/* Professional Sidebar */}
-      <aside className={`border-r overflow-y-auto transition-all duration-200 ${
-        sidebarCollapsed ? 'w-10' : 'w-70'
-      }`} style={{
-        backgroundColor: 'var(--construction-charcoal)',
-        borderColor: 'var(--construction-steel)'
-      }}>
+      <aside 
+        className="border-r overflow-y-auto" 
+        style={{
+          backgroundColor: 'var(--construction-charcoal)',
+          borderColor: 'var(--construction-steel)',
+          width: sidebarCollapsed ? '40px' : '280px',
+          transition: 'width 300ms ease-in-out, opacity 300ms ease-in-out',
+          opacity: 1
+        }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
         {sidebarCollapsed ? (
           <div className="p-3">
             <button

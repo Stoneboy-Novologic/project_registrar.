@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Report Template - defines the structure of a report page
+model ReportTemplate {
+  id          String   @id @default(cuid())
+  pageId      String   @unique  // "report-001", "report-002", etc.
+  title       String
+  category    String   // "project-documentation", "financial", "technical", "safety", "quality-control"
+  version     String   @default("1.0.0")
+  fieldsJson  Json     // Store template.fields as JSON
+  metadata    Json     // fieldCount, complexity, description
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  pages       ReportPage[]
+  
+  @@index([category])
+  @@index([pageId])
+}
+
+// Report Instance - a user-created report containing multiple pages
+model Report {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  pages       ReportPage[]
+  exports     ReportExport[]
+  
+  @@index([name])
+}
+
+// Report Page - a single page within a report instance
+model ReportPage {
+  id          String   @id @default(cuid())
+  reportId    String
+  templateId  String
+  pageOrder   Int      // Order of this page within the report
+  valuesJson  Json     // Filled field values
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  report      Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  template    ReportTemplate @relation(fields: [templateId], references: [id])
+  
+  @@unique([reportId, pageOrder])
+  @@index([reportId])
+  @@index([templateId])
+}
+
+// Report Export - tracks exported reports
+model ReportExport {
+  id          String   @id @default(cuid())
+  reportId    String
+  format      String   // "PDF", "JSON", "HTML"
+  fileUrl     String?  // URL to the exported file
+  exportedAt  DateTime @default(now())
+  
+  // Relations
+  report      Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  
+  @@index([reportId])
+  @@index([exportedAt])
+}

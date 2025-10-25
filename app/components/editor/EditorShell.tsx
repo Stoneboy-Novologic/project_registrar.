@@ -92,25 +92,63 @@ export default function EditorShell() {
     }
   };
 
+  // Initialize with a default template for demo purposes
   useEffect(() => {
-    try {
-      const parsed = ReportTemplateSchema.safeParse(
-        templateJson as unknown as ReportTemplate
-      );
-      if (!parsed.success) {
-        logError("Template validation failed", parsed.error.flatten());
-        return;
+    const initializeEditor = async () => {
+      try {
+        logInfo("Starting editor initialization...");
+        
+        // For demo purposes, load the first template from the database
+        // In a real app, this would be based on the current report context
+        const response = await fetch('/api/templates?limit=100');
+        logInfo("API response received", { status: response.status, ok: response.ok });
+        
+        if (response.ok) {
+          const data = await response.json();
+          logInfo("API data received", { templatesCount: data.templates?.length || 0 });
+          
+          const templates = data.templates || data;
+          if (templates.length > 0) {
+            const firstTemplate = templates[0];
+            logInfo("Loading first template", { pageId: firstTemplate.pageId, title: firstTemplate.title });
+            
+            // Convert database template to the format expected by loadTemplate
+            const templateData: ReportTemplate = {
+              pageId: firstTemplate.pageId,
+              title: firstTemplate.title,
+              fields: firstTemplate.fieldsJson as any[]
+            };
+            loadTemplate(templateData);
+            logInfo("Editor initialized with template from database", { pageId: firstTemplate.pageId });
+          } else {
+            logInfo("No templates found in API response");
+          }
+        } else {
+          logError("API request failed", { status: response.status, statusText: response.statusText });
+        }
+      } catch (e: any) {
+        logError("Failed to initialize editor with database template", e);
+        // Fallback to JSON template if database fails
+        try {
+          logInfo("Attempting fallback to JSON template...");
+          const parsed = ReportTemplateSchema.safeParse(
+            templateJson as unknown as ReportTemplate
+          );
+          if (parsed.success) {
+            loadTemplate(parsed.data);
+            logInfo("Editor initialized with fallback JSON template");
+          } else {
+            logError("JSON template parsing failed", parsed.error);
+          }
+        } catch (fallbackError) {
+          logError("Fallback template loading failed", fallbackError);
+        }
       }
-      
-      // Clear any existing saved values to ensure placeholders load
-      localStorage.removeItem('report-editor-project');
-      logInfo("Cleared existing saved values to ensure placeholders load");
-      
-      loadTemplate(parsed.data);
-      logInfo("Editor bootstrapped with placeholder data");
-    } catch (e: any) {
-      logError("Bootstrap error", e);
-    }
+    };
+    
+    // Add a small delay to ensure the component is fully mounted
+    const timeoutId = setTimeout(initializeEditor, 100);
+    return () => clearTimeout(timeoutId);
   }, [loadTemplate]);
 
   return (

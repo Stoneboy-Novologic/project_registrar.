@@ -1,6 +1,10 @@
 /* app/globals.css */
 @import "tailwindcss";
 
+/* Import custom report styles */
+@import "./styles/report-006.css";
+@import "./styles/report-011.css";
+
 :root {
   --background: #ffffff;
   --foreground: #1f2937;

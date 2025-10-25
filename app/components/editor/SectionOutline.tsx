@@ -1,15 +1,10 @@
 /* app/components/editor/SectionOutline.tsx */
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useEditorStore } from "@/lib/store";
-import templateJson01 from "@/app/data/templates/default-v1/report-01.json";
-import templateJson02 from "@/app/data/templates/default-v1/report-02.json";
-import templateJson03 from "@/app/data/templates/default-v1/report-03.json";
-import templateJson04 from "@/app/data/templates/default-v1/report-04.json";
-import templateJson05 from "@/app/data/templates/default-v1/report-05.json";
-import { ReportTemplateSchema } from "@/lib/validation";
-import { logInfo } from "@/lib/log";
+import { ReportTemplateDB } from "@/lib/types";
+import { logInfo, logError } from "@/lib/log";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 
@@ -18,15 +13,41 @@ export default function SectionOutline() {
     pages: true,
     fields: true,
   });
+  const [templates, setTemplates] = useState<ReportTemplateDB[]>([]);
+  const [isLoadingTemplates, setIsLoadingTemplates] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const toggleSection = (section: string) => {
     setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
   };
-  const template = useEditorStore((s) => s.template);
-  const activePageId = useEditorStore((s) => s.activePageId);
+  
+  const activeTemplate = useEditorStore((s) => s.activeTemplate);
+  const currentPageId = useEditorStore((s) => s.currentPageId);
   const loadTemplate = useEditorStore((s) => s.loadTemplate);
 
-  if (!template) {
+  // Load templates from database
+  useEffect(() => {
+    const loadTemplates = async () => {
+      try {
+        setIsLoadingTemplates(true);
+        const response = await fetch('/api/templates?limit=100');
+        if (response.ok) {
+          const data = await response.json();
+          const templatesData = data.templates || data;
+          setTemplates(templatesData);
+          logInfo("Templates loaded in sidebar", { count: templatesData.length });
+        }
+      } catch (error) {
+        logError("Failed to load templates in sidebar", error);
+      } finally {
+        setIsLoadingTemplates(false);
+      }
+    };
+    
+    loadTemplates();
+  }, []);
+
+  if (!activeTemplate) {
     return (
       <div className="p-4 text-sm flex items-center justify-center" style={{ color: 'var(--construction-light)' }}>
         <div className="flex items-center space-x-2">
@@ -40,46 +61,30 @@ export default function SectionOutline() {
     );
   }
 
-  const pages = [
-    {
-      id: "report-01",
-      title: "Page 1: Project Register",
-      description: "Project documentation with map",
-      template: templateJson01
-    },
-    {
-      id: "report-02", 
-      title: "Page 2: Hello World",
-      description: "Simple placeholder template",
-      template: templateJson02
-    },
-    {
-      id: "report-03",
-      title: "Page 3: Table of Contents & Attachments",
-      description: "Document index with attachments and authors",
-      template: templateJson03
-    },
-    {
-      id: "report-04",
-      title: "Page 4: Contents Continuation",
-      description: "Additional table of contents entries",
-      template: templateJson04
-    },
-    {
-      id: "report-05",
-      title: "Page 5: Project Overview & Stakeholders",
-      description: "Overview section with stakeholder table and contract summary",
-      template: templateJson05
-    }
-  ];
-
-  const handlePageSwitch = (pageTemplate: any) => {
-    const parsed = ReportTemplateSchema.safeParse(pageTemplate);
-    if (parsed.success) {
-      loadTemplate(parsed.data);
-      logInfo(`Switched to ${parsed.data.title}`);
-    }
+  const handleTemplateSelect = (templateData: ReportTemplateDB) => {
+    const template = {
+      pageId: templateData.pageId,
+      title: templateData.title,
+      fields: templateData.fieldsJson as any[]
+    };
+    loadTemplate(template);
+    logInfo("Template selected in sidebar", { pageId: templateData.pageId, title: templateData.title });
   };
+
+  // Filter templates based on search term
+  const filteredTemplates = templates.filter(template => 
+    template.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    template.pageId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    template.category.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Group templates by category
+  const templatesByCategory = filteredTemplates.reduce((acc, template) => {
+    const category = template.category || 'other';
+    if (!acc[category]) acc[category] = [];
+    acc[category].push(template);
+    return acc;
+  }, {} as Record<string, ReportTemplateDB[]>);
 
   return (
     <div className="p-4 space-y-4">
@@ -108,41 +113,78 @@ export default function SectionOutline() {
               transition={{ duration: 0.2, ease: "easeInOut" }}
               style={{ overflow: "hidden" }}
             >
-              <div className="space-y-2">
-                {pages.map((page) => {
-            const isActive = activePageId === page.id;
-            return (
-              <button
-                key={page.id}
-                onClick={() => handlePageSwitch(page.template)}
-                className={`w-full text-left px-4 py-3 rounded-lg border transition-all duration-200 ${
-                  isActive
-                    ? "shadow-md"
-                    : "hover:shadow-sm"
-                }`}
-                style={{
-                  backgroundColor: isActive ? 'var(--construction-concrete)' : 'var(--construction-charcoal)',
-                  borderColor: isActive ? 'var(--construction-orange)' : 'var(--construction-steel)',
-                  color: isActive ? 'var(--construction-orange)' : 'var(--construction-light)',
-                  boxShadow: isActive ? '0 0 0 2px rgba(255, 107, 53, 0.2)' : 'none'
-                }}
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 rounded-full transition-colors" style={{
-                    backgroundColor: isActive ? 'var(--construction-orange)' : 'var(--construction-steel)'
-                  }}></div>
-                  <div className="flex-1">
-                    <div className="font-semibold text-sm" style={{ color: isActive ? 'var(--construction-orange)' : 'var(--construction-light)' }}>
-                      {page.title}
-                    </div>
-                    <div className="text-xs mt-1" style={{ color: 'var(--construction-steel)' }}>
-                      {page.description}
-                    </div>
-                  </div>
+              <div className="space-y-3">
+                {/* Search Input */}
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search templates..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full px-3 py-2 text-sm rounded-lg border"
+                    style={{
+                      backgroundColor: 'var(--construction-concrete)',
+                      borderColor: 'var(--construction-steel)',
+                      color: 'var(--construction-light)'
+                    }}
+                  />
                 </div>
-              </button>
-              );
-            })}
+
+                {isLoadingTemplates ? (
+                  <div className="flex items-center justify-center py-4">
+                    <div className="w-4 h-4 border-2 rounded-full animate-spin" style={{
+                      borderColor: 'var(--construction-steel)',
+                      borderTopColor: 'var(--construction-orange)'
+                    }}></div>
+                    <span className="ml-2 text-sm" style={{ color: 'var(--construction-light)' }}>Loading templates...</span>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {Object.entries(templatesByCategory).map(([category, categoryTemplates]) => (
+                      <div key={category} className="space-y-2">
+                        <div className="text-xs font-medium uppercase tracking-wide" style={{ color: 'var(--construction-yellow)' }}>
+                          {category.replace('-', ' ')} ({categoryTemplates.length})
+                        </div>
+                        <div className="space-y-1">
+                          {categoryTemplates.map((templateData) => {
+                            const isActive = currentPageId === templateData.pageId;
+                            return (
+                              <button
+                                key={templateData.id}
+                                onClick={() => handleTemplateSelect(templateData)}
+                                className={`w-full text-left px-3 py-2 rounded-lg border transition-all duration-200 ${
+                                  isActive
+                                    ? "shadow-md"
+                                    : "hover:shadow-sm"
+                                }`}
+                                style={{
+                                  backgroundColor: isActive ? 'var(--construction-concrete)' : 'var(--construction-charcoal)',
+                                  borderColor: isActive ? 'var(--construction-orange)' : 'var(--construction-steel)',
+                                  color: isActive ? 'var(--construction-orange)' : 'var(--construction-light)',
+                                  boxShadow: isActive ? '0 0 0 2px rgba(255, 107, 53, 0.2)' : 'none'
+                                }}
+                              >
+                                <div className="flex items-center space-x-2">
+                                  <div className="w-2 h-2 rounded-full transition-colors" style={{
+                                    backgroundColor: isActive ? 'var(--construction-orange)' : 'var(--construction-steel)'
+                                  }}></div>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="font-semibold text-sm truncate" style={{ color: isActive ? 'var(--construction-orange)' : 'var(--construction-light)' }}>
+                                      {templateData.title}
+                                    </div>
+                                    <div className="text-xs mt-1 truncate" style={{ color: 'var(--construction-steel)' }}>
+                                      {templateData.pageId} • {(templateData.fieldsJson as any[])?.length || 0} fields
+                                    </div>
+                                  </div>
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </motion.div>
           )}
@@ -175,17 +217,17 @@ export default function SectionOutline() {
               style={{ overflow: "hidden" }}
             >
               <div className="space-y-2">
-                {Array.from(new Set(template.fields.map(f => f.id.split('.')[0]))).map(group => (
-            <div key={group} className="px-3 py-2 rounded border" style={{
+                {activeTemplate.fieldsJson && Array.from(new Set((activeTemplate.fieldsJson as any[]).map(f => f.id.split('.')[0]))).map(group => (
+            <div key={String(group)} className="px-3 py-2 rounded border" style={{
               backgroundColor: 'var(--construction-concrete)',
               borderColor: 'var(--construction-orange)',
               borderLeftWidth: '3px'
             }}>
               <div className="text-xs font-medium capitalize" style={{ color: 'var(--construction-light)' }}>
-                {group.replace(/([A-Z])/g, ' $1').trim()}
+                {String(group).replace(/([A-Z])/g, ' $1').trim()}
               </div>
               <div className="text-xs mt-1" style={{ color: 'var(--construction-steel)' }}>
-                {template.fields.filter(f => f.id.startsWith(group)).length} fields
+                {(activeTemplate.fieldsJson as any[]).filter(f => f.id.startsWith(String(group))).length} fields
               </div>
             </div>
               ))}

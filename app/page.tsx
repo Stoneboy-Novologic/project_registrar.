@@ -1,6 +1,7 @@
 // app/page.tsx
-import EditorShell from "./components/editor/EditorShell";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return <EditorShell />;
+  // Redirect to reports dashboard
+  redirect("/reports");
 }

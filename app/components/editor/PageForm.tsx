@@ -6,20 +6,21 @@ import { useEditorStore } from "@/lib/store";
 import FieldInput from "./FieldInput";
 
 export default function PageForm() {
-  const template = useEditorStore((s) => s.template);
+  const activeTemplate = useEditorStore((s) => s.activeTemplate);
 
   const grouped = useMemo(() => {
-    if (!template) return [] as { group: string; fields: typeof template.fields }[];
+    if (!activeTemplate) return [] as { group: string; fields: any[] }[];
+    const fields = activeTemplate.fieldsJson as any[];
     const groups: Record<string, any[]> = {};
-    for (const f of template.fields) {
+    for (const f of fields) {
       const base = f.id.split(".")[0];
       if (!groups[base]) groups[base] = [];
       groups[base].push(f);
     }
     return Object.entries(groups).map(([group, fields]) => ({ group, fields }));
-  }, [template]);
+  }, [activeTemplate]);
 
-  if (!template) return <div className="p-6">Loading…</div>;
+  if (!activeTemplate) return <div className="p-6">Loading…</div>;
 
   return (
     <div className="p-6 space-y-6 min-h-full" style={{ backgroundColor: 'var(--construction-concrete)' }}>

@@ -7,6 +7,10 @@ import { buildReport02ViewModel } from "./report02ViewModel";
 import { buildReport03ViewModel } from "./report03ViewModel";
 import { buildReport04ViewModel } from "./report04ViewModel";
 import { buildReport05ViewModel } from "./report05ViewModel";
+import { buildReport006ViewModel } from "./report-006ViewModel";
+import { buildReport011ViewModel } from "./report-011ViewModel";
+import { buildGenericViewModel } from "./viewModelFactory";
+import type { ReportTemplateDB } from "@/lib/types";
 
 export interface TemplateMetadata {
   title: string;
@@ -24,7 +28,8 @@ export interface TemplateRegistryEntry {
   metadata: TemplateMetadata;
 }
 
-export const pageRegistry = {
+// Custom components for reports 1-5 (backward compatibility)
+const customRegistry = {
   "report-01": {
     connected: dynamic(() => import("./ConnectedReport01"), { ssr: false }),
     view: async () => (await import("./Report01View")).default,
@@ -89,10 +94,77 @@ export const pageRegistry = {
       fieldCount: 34,
       complexity: "intermediate"
     }
+  },
+  "report-06": {
+    connected: dynamic(() => import("./ConnectedReport006"), { ssr: false }),
+    view: async () => (await import("./Report006View")).default,
+    viewModel: buildReport006ViewModel,
+    metadata: {
+      title: "Safety Inspection Checklist",
+      description: "Custom safety template with enhanced layout",
+      category: "safety",
+      version: "1.0.0",
+      fieldCount: 7,
+      complexity: "simple"
+    }
+  },
+  "report-011": {
+    connected: dynamic(() => import("./ConnectedReport011"), { ssr: false }),
+    view: async () => (await import("./Report011View")).default,
+    viewModel: buildReport011ViewModel,
+    metadata: {
+      title: "Budget Summary",
+      description: "Custom financial template with enhanced layout",
+      category: "financial",
+      version: "1.0.0",
+      fieldCount: 10,
+      complexity: "simple"
+    }
   }
-  // Ready for future templates
-} as const satisfies Record<string, TemplateRegistryEntry>;
+} as const;
 
-export type PageId = keyof typeof pageRegistry;
+// Generic components for all other templates
+const GenericConnected = dynamic(() => import("./GenericConnectedReport"), { ssr: false });
+const GenericView = dynamic(() => import("./GenericReportView"), { ssr: false });
+
+// Dynamic registry function that checks for custom components first
+export function getTemplateRegistryEntry(pageId: string, template?: ReportTemplateDB): TemplateRegistryEntry {
+  // Check if we have a custom component for this pageId
+  if (pageId in customRegistry) {
+    return customRegistry[pageId as keyof typeof customRegistry];
+  }
+  
+  // Use generic components for all other templates
+  return {
+    connected: GenericConnected,
+    view: async () => GenericView,
+    viewModel: (values: any) => {
+      if (template) {
+        return buildGenericViewModel(values, template.fieldsJson as any[]);
+      }
+      return values;
+    },
+    metadata: template ? {
+      title: template.title,
+      description: template.metadata?.description || `Generated template for ${template.title}`,
+      category: template.category,
+      version: template.version,
+      fieldCount: template.metadata?.fieldCount || 0,
+      complexity: template.metadata?.complexity || "simple"
+    } : {
+      title: "Unknown Template",
+      description: "Template not found",
+      category: "unknown",
+      version: "1.0.0",
+      fieldCount: 0,
+      complexity: "simple"
+    }
+  };
+}
+
+// Legacy registry for backward compatibility
+export const pageRegistry = customRegistry;
+
+export type PageId = keyof typeof customRegistry;
 
 

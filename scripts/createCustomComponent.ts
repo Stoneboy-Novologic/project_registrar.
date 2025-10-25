@@ -306,3 +306,4 @@ console.log('\nNext steps:');
 console.log('1. Add the registry entries to app/components/report-pages/registry.ts');
 console.log('2. Import the CSS files in your layout or globals.css');
 console.log('3. Test the components in the editor');
+

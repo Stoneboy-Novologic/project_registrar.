@@ -70,3 +70,4 @@ export function enhanceTemplateFields(template: ReportTemplateDB): ReportTemplat
     }
   };
 }
+

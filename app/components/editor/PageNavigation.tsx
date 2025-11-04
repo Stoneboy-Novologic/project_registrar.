@@ -84,7 +84,7 @@ export default function PageNavigation() {
   const pageTemplate = currentPage?.template as any;
 
   return (
-    <div className="flex items-center gap-3 px-4 py-2 rounded-lg border" style={{
+    <div className="flex items-center gap-3 px-4 py-2 rounded-lg border text-white" style={{
       backgroundColor: 'var(--construction-concrete)',
       borderColor: 'var(--construction-steel)'
     }}>

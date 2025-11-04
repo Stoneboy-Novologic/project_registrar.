@@ -57,6 +57,7 @@ export interface ReportPageDB {
   valuesJson: any; // JSON field containing FieldValues
   createdAt: Date;
   updatedAt: Date;
+  template?: ReportTemplateDB; // Included when fetching from API
 }
 
 export interface ReportExportDB {

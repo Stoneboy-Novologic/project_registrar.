@@ -12,6 +12,28 @@ import Toolbar from "./Toolbar";
 import PageForm from "./PageForm";
 import PagePreview from "./PagePreview";
 
+// Saving indicator component
+function SavingIndicator() {
+  const isSaving = useEditorStore((s) => s.isSaving);
+  
+  if (!isSaving) return null;
+  
+  return (
+    <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border" style={{
+      backgroundColor: 'var(--construction-concrete)',
+      borderColor: 'var(--construction-orange)'
+    }}>
+      <div className="w-3 h-3 border-2 rounded-full animate-spin" style={{
+        borderColor: 'var(--construction-steel)',
+        borderTopColor: 'var(--construction-orange)'
+      }}></div>
+      <span className="text-xs font-medium" style={{ color: 'var(--construction-light)' }}>
+        Saving...
+      </span>
+    </div>
+  );
+}
+
 export default function EditorShell() {
   const loadTemplate = useEditorStore((s) => s.loadTemplate);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true); // Start collapsed for auto-hover behavior
@@ -174,7 +196,10 @@ export default function EditorShell() {
             <p className="text-xs font-medium" style={{ color: 'var(--construction-yellow)' }}>Engineering Document Editor</p>
           </div>
         </div>
-        <Toolbar />
+        <div className="flex items-center gap-4">
+          <SavingIndicator />
+          <Toolbar />
+        </div>
       </div>
       
       {/* Professional Sidebar */}

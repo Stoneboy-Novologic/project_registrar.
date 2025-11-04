@@ -143,10 +143,13 @@ export const useEditorStore = create<EditorStore>()((set, get) => ({
       
       const newPage = await addPageToReport(currentReportId, templateId);
       
-      set((state) => ({
-        reportPages: [...state.reportPages, newPage],
+      // Refresh report to get updated pages with template data
+      const updatedReport = await fetchReport(currentReportId);
+      
+      set({
+        reportPages: updatedReport.pages,
         isSaving: false
-      }));
+      });
       
       // Switch to the new page
       await get().switchToPage(newPage.id);
@@ -165,11 +168,35 @@ export const useEditorStore = create<EditorStore>()((set, get) => ({
 
   switchToPage: async (pageId: string) => {
     try {
-      const { reportPages } = get();
+      const { reportPages, currentPageId } = get();
       const page = reportPages.find(p => p.id === pageId);
       
       if (!page) {
         throw new Error("Page not found");
+      }
+      
+      // If switching away from current page, ensure pending saves complete
+      if (currentPageId && currentPageId !== pageId && saveTimeout) {
+        clearTimeout(saveTimeout);
+        // Wait for any pending save to complete
+        const { values } = get();
+        try {
+          set({ isSaving: true });
+          await updatePageValues(get().currentReportId!, currentPageId, values);
+          // Update the page in reportPages array
+          set((state) => ({
+            reportPages: state.reportPages.map(p => 
+              p.id === currentPageId 
+                ? { ...p, valuesJson: values }
+                : p
+            ),
+            isSaving: false
+          }));
+        } catch (error) {
+          logError("Failed to save before switching pages", error);
+          set({ isSaving: false });
+        }
+        saveTimeout = null;
       }
       
       logInfo("Switching to page", { pageId, templateId: page.templateId });
@@ -177,16 +204,30 @@ export const useEditorStore = create<EditorStore>()((set, get) => ({
       // Load template for this page
       const template = await fetchTemplate(page.templateId);
       
+      // Load saved values from page, ensuring we use actual saved values
+      const savedValues = (page.valuesJson as FieldValues) || {};
+      
+      // Merge with template placeholders only for fields that don't have saved values
+      const fields = template.fieldsJson as any[];
+      const mergedValues: FieldValues = { ...savedValues };
+      fields.forEach(field => {
+        // Only use placeholder if field has no saved value
+        if (!(field.id in mergedValues) && field.placeholder) {
+          mergedValues[field.id] = field.placeholder;
+        }
+      });
+      
       set({
         currentPageId: pageId,
         activeTemplate: template,
-        values: page.valuesJson as FieldValues
+        values: mergedValues
       });
       
       logInfo("Switched to page successfully", { 
         pageId, 
         templateTitle: template.title,
-        fieldCount: Object.keys(page.valuesJson as FieldValues).length
+        fieldCount: Object.keys(mergedValues).length,
+        savedFieldCount: Object.keys(savedValues).length
       });
     } catch (error) {
       logError("Failed to switch to page", error);
@@ -204,6 +245,15 @@ export const useEditorStore = create<EditorStore>()((set, get) => ({
       // Update local state immediately (optimistic update)
       set({ values });
       
+      // Update reportPages array optimistically
+      set((state) => ({
+        reportPages: state.reportPages.map(page => 
+          page.id === currentPageId 
+            ? { ...page, valuesJson: values }
+            : page
+        )
+      }));
+      
       // Debounced save to database
       if (saveTimeout) {
         clearTimeout(saveTimeout);
@@ -212,13 +262,13 @@ export const useEditorStore = create<EditorStore>()((set, get) => ({
       saveTimeout = setTimeout(async () => {
         try {
           set({ isSaving: true });
-          await updatePageValues(currentReportId, currentPageId, values);
+          const savedPage = await updatePageValues(currentReportId, currentPageId, values);
           
-          // Update the page in reportPages array
+          // Update the page in reportPages array with server response
           set((state) => ({
             reportPages: state.reportPages.map(page => 
               page.id === currentPageId 
-                ? { ...page, valuesJson: values }
+                ? { ...page, valuesJson: savedPage.valuesJson as FieldValues }
                 : page
             ),
             isSaving: false
@@ -228,6 +278,7 @@ export const useEditorStore = create<EditorStore>()((set, get) => ({
         } catch (error) {
           logError("Failed to auto-save page values", error);
           set({ isSaving: false });
+          // Optionally show error notification to user
         }
       }, 2000); // 2 second debounce
       
@@ -239,7 +290,7 @@ export const useEditorStore = create<EditorStore>()((set, get) => ({
 
   deletePageFromReport: async (pageId: string) => {
     try {
-      const { currentReportId } = get();
+      const { currentReportId, currentPageId } = get();
       if (!currentReportId) {
         throw new Error("No report loaded");
       }
@@ -249,8 +300,11 @@ export const useEditorStore = create<EditorStore>()((set, get) => ({
       
       await removePageFromReport(currentReportId, pageId);
       
+      // Fetch updated report to get reordered pages
+      const updatedReport = await fetchReport(currentReportId);
+      
       set((state) => {
-        const updatedPages = state.reportPages.filter(p => p.id !== pageId);
+        const updatedPages = updatedReport.pages;
         
         // If we're deleting the current page, switch to another page
         let newCurrentPageId = state.currentPageId;
@@ -260,7 +314,7 @@ export const useEditorStore = create<EditorStore>()((set, get) => ({
         if (state.currentPageId === pageId) {
           if (updatedPages.length > 0) {
             newCurrentPageId = updatedPages[0].id;
-            // Note: We'll need to load the template and values separately
+            // Will load template and values in next step
           } else {
             newCurrentPageId = null;
             newActiveTemplate = null;
@@ -276,6 +330,12 @@ export const useEditorStore = create<EditorStore>()((set, get) => ({
           isSaving: false
         };
       });
+      
+      // If we switched to a new page, load it
+      const { currentPageId: newPageId } = get();
+      if (newPageId && newPageId !== pageId) {
+        await get().switchToPage(newPageId);
+      }
       
       logInfo("Page removed from report successfully", { reportId: currentReportId, pageId });
     } catch (error) {

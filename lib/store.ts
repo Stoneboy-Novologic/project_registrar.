@@ -201,8 +201,33 @@ export const useEditorStore = create<EditorStore>()((set, get) => ({
       
       logInfo("Switching to page", { pageId, templateId: page.templateId });
       
-      // Load template for this page
-      const template = await fetchTemplate(page.templateId);
+      // Use template from page relation if available (it should be included when fetching report)
+      let template: ReportTemplateDB;
+      if (page.template) {
+        // Template is already loaded in the page relation
+        template = page.template;
+        logInfo("Using template from page relation", { templatePageId: template.pageId });
+      } else {
+        // Fallback: fetch template by its pageId
+        // This should not happen if pages are loaded with template relation
+        // But we need to fetch by the template's pageId, not the database ID
+        // Since we don't have the template relation, we need to fetch the template by its database ID first
+        // Actually, we can't do that easily without a new API endpoint
+        // So let's refresh the report to get pages with template relation
+        logInfo("Template not in page relation, refreshing report", { pageId });
+        const { currentReportId } = get();
+        if (currentReportId) {
+          const refreshedReport = await fetchReport(currentReportId);
+          const refreshedPage = refreshedReport.pages.find(p => p.id === pageId);
+          if (refreshedPage?.template) {
+            template = refreshedPage.template;
+          } else {
+            throw new Error(`Template not found for page ${pageId}`);
+          }
+        } else {
+          throw new Error("No report loaded and template not available");
+        }
+      }
       
       // Load saved values from page, ensuring we use actual saved values
       const savedValues = (page.valuesJson as FieldValues) || {};
@@ -221,6 +246,12 @@ export const useEditorStore = create<EditorStore>()((set, get) => ({
         currentPageId: pageId,
         activeTemplate: template,
         values: mergedValues
+      });
+      
+      logInfo("Store state updated", { 
+        currentPageId: pageId, 
+        templatePageId: template.pageId,
+        valuesCount: Object.keys(mergedValues).length
       });
       
       logInfo("Switched to page successfully", { 

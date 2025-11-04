@@ -7,6 +7,17 @@ import { getTemplateRegistryEntry } from "@/app/components/report-pages/registry
 export default function PagePreview() {
   const activeTemplate = useEditorStore((s) => s.activeTemplate);
   const values = useEditorStore((s) => s.values);
+  const currentPageId = useEditorStore((s) => s.currentPageId);
+  
+  // Debug logging
+  if (typeof window !== 'undefined' && activeTemplate) {
+    console.log('[PagePreview] Rendering with:', {
+      pageId: activeTemplate.pageId,
+      title: activeTemplate.title,
+      valuesCount: Object.keys(values).length,
+      currentPageId
+    });
+  }
   
   if (!activeTemplate) {
     return (

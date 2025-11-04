@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useEditorStore } from "@/lib/store";
 import { exportValues, importValues } from "@/lib/persistence";
 import Tooltip from "./Tooltip";
+import PDFExportButton from "./PDFExportButton";
 
 export default function Toolbar() {
   // Select individual slices to avoid returning a new object each render,
@@ -52,8 +53,12 @@ export default function Toolbar() {
 
   return (
     <div className="flex items-center gap-3">
+      {/* PDF Export Button */}
+      <PDFExportButton />
+      
+      {/* JSON Export Button */}
       <button
-        className="construction-btn-primary inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 shadow-md"
+        className="construction-btn-secondary inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 shadow-sm"
         onClick={() => {
           const data = exportValues(values);
           const blob = new Blob([data], { type: "application/json" });
@@ -64,11 +69,12 @@ export default function Toolbar() {
           a.click();
           URL.revokeObjectURL(url);
         }}
+        title="Export to JSON (Ctrl+E)"
       >
         <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
-        Export
+        Export JSON
       </button>
       <label className="construction-btn-secondary inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 shadow-sm cursor-pointer">
         <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

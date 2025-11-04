@@ -6,6 +6,9 @@
 @import "./styles/report-006.css";
 @import "./styles/report-011.css";
 
+/* Import PDF print styles */
+@import "./styles/pdf-print.css";
+
 :root {
   --background: #ffffff;
   --foreground: #1f2937;

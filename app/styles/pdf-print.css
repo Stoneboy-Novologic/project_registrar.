@@ -1,0 +1,210 @@
+/**
+ * @file pdf-print.css
+ * @module styles
+ * @description Print-optimized CSS for PDF exports with page break controls and print-friendly styling
+ * @author BharatERP
+ * @created 2025-01-27
+ */
+
+/* Print Media Query */
+@media print {
+  /* Reset body for printing */
+  body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  /* Hide non-printable elements */
+  .no-print,
+  button,
+  .toolbar,
+  .sidebar,
+  nav,
+  header:not(.print-header),
+  footer:not(.print-footer) {
+    display: none !important;
+  }
+
+  /* Page break controls */
+  .page-break-before {
+    page-break-before: always;
+  }
+
+  .page-break-after {
+    page-break-after: always;
+  }
+
+  .page-break-inside-avoid {
+    page-break-inside: avoid;
+  }
+
+  /* Report pages */
+  .report-page {
+    page-break-after: always;
+    page-break-inside: avoid;
+  }
+
+  .report-page:last-child {
+    page-break-after: auto;
+  }
+
+  /* Sections */
+  .section {
+    page-break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+
+  /* Images */
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+    page-break-inside: avoid;
+    page-break-after: avoid;
+  }
+
+  /* Tables */
+  table {
+    page-break-inside: avoid;
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  tr {
+    page-break-inside: avoid;
+  }
+
+  /* Headers and footers */
+  .print-header {
+    position: running(header);
+    width: 100%;
+  }
+
+  .print-footer {
+    position: running(footer);
+    width: 100%;
+  }
+
+  /* Links */
+  a {
+    color: #000000 !important;
+    text-decoration: underline;
+  }
+
+  a[href^="http"]:after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #666;
+  }
+
+  /* Colors - optimize for printing */
+  * {
+    color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Background colors - ensure they print */
+  .bg-white,
+  .bg-gray-50,
+  .bg-gray-100 {
+    background: #ffffff !important;
+  }
+
+  /* Text colors - convert to black for better printing */
+  .text-gray-600,
+  .text-gray-700,
+  .text-gray-800 {
+    color: #000000 !important;
+  }
+
+  /* Borders */
+  .border,
+  .border-gray-300,
+  .border-gray-400 {
+    border-color: #000000 !important;
+  }
+
+  /* Shadows - remove for print */
+  .shadow-sm,
+  .shadow-md,
+  .shadow-lg {
+    box-shadow: none !important;
+  }
+
+  /* Spacing adjustments for print */
+  .p-6,
+  .p-8,
+  .p-10 {
+    padding: 1rem !important;
+  }
+
+  .mb-4,
+  .mb-6,
+  .mb-8 {
+    margin-bottom: 0.75rem !important;
+  }
+
+  /* Font sizes - ensure readability */
+  .text-xs {
+    font-size: 10pt !important;
+  }
+
+  .text-sm {
+    font-size: 11pt !important;
+  }
+
+  .text-base {
+    font-size: 12pt !important;
+  }
+
+  .text-lg {
+    font-size: 14pt !important;
+  }
+
+  .text-xl {
+    font-size: 16pt !important;
+  }
+
+  .text-2xl {
+    font-size: 18pt !important;
+  }
+
+  /* Page numbering */
+  .page-number::after {
+    content: counter(page);
+  }
+
+  .total-pages::after {
+    content: counter(pages);
+  }
+}
+
+/* Screen media - keep original styles */
+@media screen {
+  .report-page {
+    margin-bottom: 2rem;
+  }
+}
+
+/* Page size definitions */
+@page {
+  size: A4;
+  margin: 2cm 1.5cm;
+}
+
+@page :first {
+  margin-top: 2cm;
+}
+
+@page :left {
+  margin-left: 2cm;
+  margin-right: 1.5cm;
+}
+
+@page :right {
+  margin-left: 1.5cm;
+  margin-right: 2cm;
+}
+

@@ -6,6 +6,14 @@
  * @created 2025-01-27
  */
 
+"use client";
+
+import Page from "../report-primitives/Page";
+import Section from "../report-primitives/Section";
+import Stack from "../report-primitives/Stack";
+import Text from "../report-primitives/Text";
+import Badge from "../report-primitives/Badge";
+import Rule from "../report-primitives/Rule";
 import { Report013ViewModel } from "./report-013ViewModel";
 
 interface Report013ViewProps {
@@ -14,69 +22,100 @@ interface Report013ViewProps {
 
 export default function Report013View({ viewModel }: Report013ViewProps) {
   return (
-    <div className="report013-report">
-      <div className="report-header">
-        <h1 className="report-title">Site Photos Documentation</h1>
-        <div className="report-meta">
-          <span className="category-badge technical">technical</span>
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <div className="border-b border-gray-300 bg-white">
+        <div className="max-w-[1440px] mx-auto px-10 md:px-12 lg:px-14 py-3">
+          <Section align="center" justify="between">
+            <Text variant="breadcrumb">Site Photos Documentation</Text>
+            <Badge>technical</Badge>
+          </Section>
         </div>
       </div>
-      
-      <div className="report-content">
-      <div className="section header-section">
-        <h2 className="section-title">Header</h2>
-        <div className="field-group">
-          <label className="field-label">Photo Date</label>
-          <div className="field-value">{viewModel.header.date}</div>
-        </div>
-        <div className="field-group">
-          <label className="field-label">Site Location</label>
-          <div className="field-value">{viewModel.header.location}</div>
-        </div>
-      </div>
-      <div className="section photos-section">
-        <h2 className="section-title">Photos</h2>
-        <div className="field-group">
-          <label className="field-label">Progress Photos</label>
-          <div className="field-value image">
-            {viewModel.photos.progress ? (
-              <img src={viewModel.photos.progress as string} alt="Progress Photos" className="report-image" />
-            ) : (
-              <span className="text-gray-400">No image uploaded</span>
-            )}
-          </div>
-        </div>
-        <div className="field-group">
-          <label className="field-label">Quality Photos</label>
-          <div className="field-value image">
-            {viewModel.photos.quality ? (
-              <img src={viewModel.photos.quality as string} alt="Quality Photos" className="report-image" />
-            ) : (
-              <span className="text-gray-400">No image uploaded</span>
-            )}
-          </div>
-        </div>
-        <div className="field-group">
-          <label className="field-label">Issue Photos</label>
-          <div className="field-value image">
-            {viewModel.photos.issues ? (
-              <img src={viewModel.photos.issues as string} alt="Issue Photos" className="report-image" />
-            ) : (
-              <span className="text-gray-400">No image uploaded</span>
-            )}
-          </div>
-        </div>
-        <div className="field-group">
-          <label className="field-label">Photo Descriptions</label>
-          <div className="field-value multiline">{viewModel.photos.description}</div>
-        </div>
-        <div className="field-group">
-          <label className="field-label">Photographer</label>
-          <div className="field-value">{viewModel.photos.photographer}</div>
-        </div>
-      </div>
-      </div>
+
+      {/* Main Content */}
+      <Page>
+        <Stack gap="lg">
+          {/* Header Section */}
+          <Stack gap="md">
+            <Text variant="h1">Site Photos Documentation</Text>
+            <Stack gap="xs">
+              {viewModel.header.date && (
+                <Section align="start" justify="start" className="gap-4">
+                  <Text strong>Photo Date:</Text>
+                  <Text>{viewModel.header.date}</Text>
+                </Section>
+              )}
+              {viewModel.header.location && (
+                <Section align="start" justify="start" className="gap-4">
+                  <Text strong>Site Location:</Text>
+                  <Text>{viewModel.header.location}</Text>
+                </Section>
+              )}
+            </Stack>
+          </Stack>
+
+          <Rule />
+
+          {/* Photos Section */}
+          <Stack gap="md">
+            <Text variant="h2">Photos</Text>
+            <Stack gap="md">
+              {viewModel.photos.progress && (
+                <Stack gap="xs">
+                  <Text strong>Progress Photos</Text>
+                  <div className="w-full">
+                    <img
+                      src={viewModel.photos.progress as string}
+                      alt="Progress Photos"
+                      className="w-full h-auto border border-gray-300 rounded shadow-sm"
+                    />
+                  </div>
+                </Stack>
+              )}
+              {viewModel.photos.quality && (
+                <Stack gap="xs">
+                  <Text strong>Quality Photos</Text>
+                  <div className="w-full">
+                    <img
+                      src={viewModel.photos.quality as string}
+                      alt="Quality Photos"
+                      className="w-full h-auto border border-gray-300 rounded shadow-sm"
+                    />
+                  </div>
+                </Stack>
+              )}
+              {viewModel.photos.issues && (
+                <Stack gap="xs">
+                  <Text strong>Issue Photos</Text>
+                  <div className="w-full">
+                    <img
+                      src={viewModel.photos.issues as string}
+                      alt="Issue Photos"
+                      className="w-full h-auto border border-gray-300 rounded shadow-sm"
+                    />
+                  </div>
+                </Stack>
+              )}
+              {viewModel.photos.description && (
+                <Stack gap="xs">
+                  <Text strong>Photo Descriptions</Text>
+                  <Text multiline>{viewModel.photos.description}</Text>
+                </Stack>
+              )}
+              {viewModel.photos.photographer && (
+                <Stack gap="xs">
+                  <Text strong>Photographer</Text>
+                  <Text>{viewModel.photos.photographer}</Text>
+                </Stack>
+              )}
+            </Stack>
+          </Stack>
+        </Stack>
+      </Page>
+
+      {/* Footer */}
+      <div className="border-t border-gray-300 bg-white h-8" />
     </div>
   );
 }
-

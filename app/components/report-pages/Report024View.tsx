@@ -6,6 +6,14 @@
  * @created 2025-01-27
  */
 
+"use client";
+
+import Page from "../report-primitives/Page";
+import Section from "../report-primitives/Section";
+import Stack from "../report-primitives/Stack";
+import Text from "../report-primitives/Text";
+import Badge from "../report-primitives/Badge";
+import Rule from "../report-primitives/Rule";
 import { Report024ViewModel } from "./report-024ViewModel";
 
 interface Report024ViewProps {
@@ -14,65 +22,100 @@ interface Report024ViewProps {
 
 export default function Report024View({ viewModel }: Report024ViewProps) {
   return (
-    <div className="report024-report">
-      <div className="report-header">
-        <h1 className="report-title">As-Built Documentation</h1>
-        <div className="report-meta">
-          <span className="category-badge technical">technical</span>
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <div className="border-b border-gray-300 bg-white">
+        <div className="max-w-[1440px] mx-auto px-10 md:px-12 lg:px-14 py-3">
+          <Section align="center" justify="between">
+            <Text variant="breadcrumb">As-Built Documentation</Text>
+            <Badge>technical</Badge>
+          </Section>
         </div>
       </div>
-      
-      <div className="report-content">
-      <div className="section header-section">
-        <h2 className="section-title">Header</h2>
-        <div className="field-group">
-          <label className="field-label">Documentation Date</label>
-          <div className="field-value">{viewModel.header.date}</div>
-        </div>
-        <div className="field-group">
-          <label className="field-label">Project Name</label>
-          <div className="field-value">{viewModel.header.project}</div>
-        </div>
-      </div>
-      <div className="section asbuilt-section">
-        <h2 className="section-title">Asbuilt</h2>
-        <div className="field-group">
-          <label className="field-label">Location</label>
-          <div className="field-value">{viewModel.asbuilt.location}</div>
-        </div>
-        <div className="field-group">
-          <label className="field-label">Work Completed</label>
-          <div className="field-value multiline">{viewModel.asbuilt.work}</div>
-        </div>
-        <div className="field-group">
-          <label className="field-label">Actual Dimensions</label>
-          <div className="field-value multiline">{viewModel.asbuilt.dimensions}</div>
-        </div>
-        <div className="field-group">
-          <label className="field-label">Materials Used</label>
-          <div className="field-value multiline">{viewModel.asbuilt.materials}</div>
-        </div>
-        <div className="field-group">
-          <label className="field-label">Deviations from Plans</label>
-          <div className="field-value multiline">{viewModel.asbuilt.deviations}</div>
-        </div>
-        <div className="field-group">
-          <label className="field-label">As-Built Photos</label>
-          <div className="field-value image">
-            {viewModel.asbuilt.photos ? (
-              <img src={viewModel.asbuilt.photos as string} alt="As-Built Photos" className="report-image" />
-            ) : (
-              <span className="text-gray-400">No image uploaded</span>
-            )}
-          </div>
-        </div>
-        <div className="field-group">
-          <label className="field-label">Documented By</label>
-          <div className="field-value">{viewModel.asbuilt.documenter}</div>
-        </div>
-      </div>
-      </div>
+
+      {/* Main Content */}
+      <Page>
+        <Stack gap="lg">
+          {/* Header Section */}
+          <Stack gap="md">
+            <Text variant="h1">As-Built Documentation</Text>
+            <Stack gap="xs">
+              {viewModel.header.date && (
+                <Section align="start" justify="start" className="gap-4">
+                  <Text strong>Date:</Text>
+                  <Text>{viewModel.header.date}</Text>
+                </Section>
+              )}
+              {viewModel.header.project && (
+                <Section align="start" justify="start" className="gap-4">
+                  <Text strong>Project:</Text>
+                  <Text>{viewModel.header.project}</Text>
+                </Section>
+              )}
+            </Stack>
+          </Stack>
+
+          <Rule />
+
+          {/* As-Built Section */}
+          <Stack gap="md">
+            <Text variant="h2">As-Built Details</Text>
+            <Stack gap="md">
+              {viewModel.asbuilt.location && (
+                <Stack gap="xs">
+                  <Text strong>Location</Text>
+                  <Text>{viewModel.asbuilt.location}</Text>
+                </Stack>
+              )}
+              {viewModel.asbuilt.work && (
+                <Stack gap="xs">
+                  <Text strong>Work Completed</Text>
+                  <Text multiline>{viewModel.asbuilt.work}</Text>
+                </Stack>
+              )}
+              {viewModel.asbuilt.dimensions && (
+                <Stack gap="xs">
+                  <Text strong>Dimensions</Text>
+                  <Text multiline>{viewModel.asbuilt.dimensions}</Text>
+                </Stack>
+              )}
+              {viewModel.asbuilt.materials && (
+                <Stack gap="xs">
+                  <Text strong>Materials Used</Text>
+                  <Text multiline>{viewModel.asbuilt.materials}</Text>
+                </Stack>
+              )}
+              {viewModel.asbuilt.deviations && (
+                <Stack gap="xs">
+                  <Text strong>Deviations from Plans</Text>
+                  <Text multiline>{viewModel.asbuilt.deviations}</Text>
+                </Stack>
+              )}
+              {viewModel.asbuilt.photos && (
+                <Stack gap="xs">
+                  <Text strong>As-Built Photos</Text>
+                  <div className="w-full">
+                    <img
+                      src={viewModel.asbuilt.photos as string}
+                      alt="As-Built Photos"
+                      className="w-full h-auto border border-gray-300 rounded shadow-sm"
+                    />
+                  </div>
+                </Stack>
+              )}
+              {viewModel.asbuilt.documenter && (
+                <Stack gap="xs">
+                  <Text strong>Documented By</Text>
+                  <Text>{viewModel.asbuilt.documenter}</Text>
+                </Stack>
+              )}
+            </Stack>
+          </Stack>
+        </Stack>
+      </Page>
+
+      {/* Footer */}
+      <div className="border-t border-gray-300 bg-white h-8" />
     </div>
   );
 }
-

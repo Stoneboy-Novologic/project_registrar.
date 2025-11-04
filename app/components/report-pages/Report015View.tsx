@@ -6,6 +6,14 @@
  * @created 2025-01-27
  */
 
+"use client";
+
+import Page from "../report-primitives/Page";
+import Section from "../report-primitives/Section";
+import Stack from "../report-primitives/Stack";
+import Text from "../report-primitives/Text";
+import Badge from "../report-primitives/Badge";
+import Rule from "../report-primitives/Rule";
 import { Report015ViewModel } from "./report-015ViewModel";
 
 interface Report015ViewProps {
@@ -14,59 +22,94 @@ interface Report015ViewProps {
 
 export default function Report015View({ viewModel }: Report015ViewProps) {
   return (
-    <div className="report015-report">
-      <div className="report-header">
-        <h1 className="report-title">RFI (Request for Information)</h1>
-        <div className="report-meta">
-          <span className="category-badge technical">technical</span>
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <div className="border-b border-gray-300 bg-white">
+        <div className="max-w-[1440px] mx-auto px-10 md:px-12 lg:px-14 py-3">
+          <Section align="center" justify="between">
+            <Text variant="breadcrumb">RFI (Request for Information)</Text>
+            <Badge>technical</Badge>
+          </Section>
         </div>
       </div>
-      
-      <div className="report-content">
-      <div className="section header-section">
-        <h2 className="section-title">Header</h2>
-        <div className="field-group">
-          <label className="field-label">Project Name</label>
-          <div className="field-value">{viewModel.header.project}</div>
-        </div>
-        <div className="field-group">
-          <label className="field-label">RFI Date</label>
-          <div className="field-value">{viewModel.header.date}</div>
-        </div>
-        <div className="field-group">
-          <label className="field-label">RFI Number</label>
-          <div className="field-value">{viewModel.header.number}</div>
-        </div>
-      </div>
-      <div className="section rfi-section">
-        <h2 className="section-title">Rfi</h2>
-        <div className="field-group">
-          <label className="field-label">Question/Issue</label>
-          <div className="field-value multiline">{viewModel.rfi.question}</div>
-        </div>
-        <div className="field-group">
-          <label className="field-label">Context/Background</label>
-          <div className="field-value multiline">{viewModel.rfi.context}</div>
-        </div>
-        <div className="field-group">
-          <label className="field-label">Project Impact</label>
-          <div className="field-value multiline">{viewModel.rfi.impact}</div>
-        </div>
-        <div className="field-group">
-          <label className="field-label">Urgency Level</label>
-          <div className="field-value">{viewModel.rfi.urgency}</div>
-        </div>
-        <div className="field-group">
-          <label className="field-label">Requested By</label>
-          <div className="field-value">{viewModel.rfi.requestor}</div>
-        </div>
-        <div className="field-group">
-          <label className="field-label">Response Required By</label>
-          <div className="field-value">{viewModel.rfi.response}</div>
-        </div>
-      </div>
-      </div>
+
+      {/* Main Content */}
+      <Page>
+        <Stack gap="lg">
+          {/* Header Section */}
+          <Stack gap="md">
+            <Text variant="h1">RFI (Request for Information)</Text>
+            <Stack gap="xs">
+              {viewModel.header.project && (
+                <Section align="start" justify="start" className="gap-4">
+                  <Text strong>Project:</Text>
+                  <Text>{viewModel.header.project}</Text>
+                </Section>
+              )}
+              {viewModel.header.date && (
+                <Section align="start" justify="start" className="gap-4">
+                  <Text strong>RFI Date:</Text>
+                  <Text>{viewModel.header.date}</Text>
+                </Section>
+              )}
+              {viewModel.header.number && (
+                <Section align="start" justify="start" className="gap-4">
+                  <Text strong>RFI Number:</Text>
+                  <Text>{viewModel.header.number}</Text>
+                </Section>
+              )}
+            </Stack>
+          </Stack>
+
+          <Rule />
+
+          {/* RFI Section */}
+          <Stack gap="md">
+            <Text variant="h2">RFI Details</Text>
+            <Stack gap="md">
+              {viewModel.rfi.question && (
+                <Stack gap="xs">
+                  <Text strong>Question/Issue</Text>
+                  <Text multiline>{viewModel.rfi.question}</Text>
+                </Stack>
+              )}
+              {viewModel.rfi.context && (
+                <Stack gap="xs">
+                  <Text strong>Context/Background</Text>
+                  <Text multiline>{viewModel.rfi.context}</Text>
+                </Stack>
+              )}
+              {viewModel.rfi.impact && (
+                <Stack gap="xs">
+                  <Text strong>Project Impact</Text>
+                  <Text multiline>{viewModel.rfi.impact}</Text>
+                </Stack>
+              )}
+              {viewModel.rfi.urgency && (
+                <Stack gap="xs">
+                  <Text strong>Urgency Level</Text>
+                  <Text>{viewModel.rfi.urgency}</Text>
+                </Stack>
+              )}
+              {viewModel.rfi.requestor && (
+                <Stack gap="xs">
+                  <Text strong>Requested By</Text>
+                  <Text>{viewModel.rfi.requestor}</Text>
+                </Stack>
+              )}
+              {viewModel.rfi.response && (
+                <Stack gap="xs">
+                  <Text strong>Response Required By</Text>
+                  <Text>{viewModel.rfi.response}</Text>
+                </Stack>
+              )}
+            </Stack>
+          </Stack>
+        </Stack>
+      </Page>
+
+      {/* Footer */}
+      <div className="border-t border-gray-300 bg-white h-8" />
     </div>
   );
 }
-

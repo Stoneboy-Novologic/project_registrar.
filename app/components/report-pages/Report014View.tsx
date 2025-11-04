@@ -6,6 +6,14 @@
  * @created 2025-01-27
  */
 
+"use client";
+
+import Page from "../report-primitives/Page";
+import Section from "../report-primitives/Section";
+import Stack from "../report-primitives/Stack";
+import Text from "../report-primitives/Text";
+import Badge from "../report-primitives/Badge";
+import Rule from "../report-primitives/Rule";
 import { Report014ViewModel } from "./report-014ViewModel";
 
 interface Report014ViewProps {
@@ -14,74 +22,114 @@ interface Report014ViewProps {
 
 export default function Report014View({ viewModel }: Report014ViewProps) {
   return (
-    <div className="report014-report">
-      <div className="report-header">
-        <h1 className="report-title">Meeting Minutes</h1>
-        <div className="report-meta">
-          <span className="category-badge project-documentation">project-documentation</span>
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <div className="border-b border-gray-300 bg-white">
+        <div className="max-w-[1440px] mx-auto px-10 md:px-12 lg:px-14 py-3">
+          <Section align="center" justify="between">
+            <Text variant="breadcrumb">Meeting Minutes</Text>
+            <Badge>project-documentation</Badge>
+          </Section>
         </div>
       </div>
-      
-      <div className="report-content">
-      <div className="section header-section">
-        <h2 className="section-title">Header</h2>
-        <div className="field-group">
-          <label className="field-label">Meeting Date</label>
-          <div className="field-value">{viewModel.header.date}</div>
-        </div>
-        <div className="field-group">
-          <label className="field-label">Meeting Time</label>
-          <div className="field-value">{viewModel.header.time}</div>
-        </div>
-        <div className="field-group">
-          <label className="field-label">Meeting Location</label>
-          <div className="field-value">{viewModel.header.location}</div>
-        </div>
-      </div>
-      <div className="section attendees-section">
-        <h2 className="section-title">Attendees</h2>
-        <div className="field-group">
-          <label className="field-label">Attendees</label>
-          <div className="field-value multiline">{viewModel.attendees.list}</div>
-        </div>
-      </div>
-      <div className="section agenda-section">
-        <h2 className="section-title">Agenda</h2>
-        <div className="field-group">
-          <label className="field-label">Agenda Items</label>
-          <div className="field-value multiline">{viewModel.agenda.items}</div>
-        </div>
-      </div>
-      <div className="section decisions-section">
-        <h2 className="section-title">Decisions</h2>
-        <div className="field-group">
-          <label className="field-label">Decisions Made</label>
-          <div className="field-value multiline">{viewModel.decisions.made}</div>
-        </div>
-      </div>
-      <div className="section action-section">
-        <h2 className="section-title">Action</h2>
-        <div className="field-group">
-          <label className="field-label">Action Items</label>
-          <div className="field-value multiline">{viewModel.action.items}</div>
-        </div>
-      </div>
-      <div className="section next-section">
-        <h2 className="section-title">Next</h2>
-        <div className="field-group">
-          <label className="field-label">Next Meeting</label>
-          <div className="field-value">{viewModel.next.meeting}</div>
-        </div>
-      </div>
-      <div className="section minutes-section">
-        <h2 className="section-title">Minutes</h2>
-        <div className="field-group">
-          <label className="field-label">Minutes Recorder</label>
-          <div className="field-value">{viewModel.minutes.recorder}</div>
-        </div>
-      </div>
-      </div>
+
+      {/* Main Content */}
+      <Page>
+        <Stack gap="lg">
+          {/* Header Section */}
+          <Stack gap="md">
+            <Text variant="h1">Meeting Minutes</Text>
+            <Stack gap="xs">
+              {viewModel.header.date && (
+                <Section align="start" justify="start" className="gap-4">
+                  <Text strong>Meeting Date:</Text>
+                  <Text>{viewModel.header.date}</Text>
+                </Section>
+              )}
+              {viewModel.header.time && (
+                <Section align="start" justify="start" className="gap-4">
+                  <Text strong>Meeting Time:</Text>
+                  <Text>{viewModel.header.time}</Text>
+                </Section>
+              )}
+              {viewModel.header.location && (
+                <Section align="start" justify="start" className="gap-4">
+                  <Text strong>Meeting Location:</Text>
+                  <Text>{viewModel.header.location}</Text>
+                </Section>
+              )}
+            </Stack>
+          </Stack>
+
+          <Rule />
+
+          {/* Attendees Section */}
+          {viewModel.attendees.list && (
+            <>
+              <Stack gap="md">
+                <Text variant="h2">Attendees</Text>
+                <Text multiline>{viewModel.attendees.list}</Text>
+              </Stack>
+              <Rule />
+            </>
+          )}
+
+          {/* Agenda Section */}
+          {viewModel.agenda.items && (
+            <>
+              <Stack gap="md">
+                <Text variant="h2">Agenda</Text>
+                <Text multiline>{viewModel.agenda.items}</Text>
+              </Stack>
+              <Rule />
+            </>
+          )}
+
+          {/* Decisions Section */}
+          {viewModel.decisions.made && (
+            <>
+              <Stack gap="md">
+                <Text variant="h2">Decisions</Text>
+                <Text multiline>{viewModel.decisions.made}</Text>
+              </Stack>
+              <Rule />
+            </>
+          )}
+
+          {/* Action Items Section */}
+          {viewModel.action.items && (
+            <>
+              <Stack gap="md">
+                <Text variant="h2">Action Items</Text>
+                <Text multiline>{viewModel.action.items}</Text>
+              </Stack>
+              <Rule />
+            </>
+          )}
+
+          {/* Next Meeting Section */}
+          {viewModel.next.meeting && (
+            <Stack gap="md">
+              <Text variant="h2">Next Meeting</Text>
+              <Text>{viewModel.next.meeting}</Text>
+            </Stack>
+          )}
+
+          {/* Minutes Recorder */}
+          {viewModel.minutes.recorder && (
+            <>
+              <Rule />
+              <Stack gap="md">
+                <Text variant="h2">Minutes Recorder</Text>
+                <Text>{viewModel.minutes.recorder}</Text>
+              </Stack>
+            </>
+          )}
+        </Stack>
+      </Page>
+
+      {/* Footer */}
+      <div className="border-t border-gray-300 bg-white h-8" />
     </div>
   );
 }
-

@@ -2,6 +2,7 @@
 @import "tailwindcss";
 
 /* Import custom report styles */
+/* Note: report-007 through report-025 now use report-primitives, CSS no longer needed */
 @import "./styles/report-006.css";
 @import "./styles/report-011.css";
 

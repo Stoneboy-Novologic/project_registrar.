@@ -94,11 +94,11 @@ export default function PageNavigation() {
         disabled={!canGoPrevious}
         className={`flex items-center justify-center w-8 h-8 rounded transition-all ${
           canGoPrevious 
-            ? 'hover:bg-gray-200 cursor-pointer' 
-            : 'opacity-30 cursor-not-allowed'
+            ? 'hover:bg-white/20 cursor-pointer' 
+            : 'opacity-50 cursor-not-allowed'
         }`}
         style={{
-          color: canGoPrevious ? 'var(--construction-charcoal)' : 'var(--construction-steel)'
+          color: canGoPrevious ? 'white' : 'rgba(255, 255, 255, 0.5)'
         }}
         title={canGoPrevious ? "Previous page (←)" : "First page"}
       >
@@ -107,7 +107,7 @@ export default function PageNavigation() {
 
       {/* Page Info */}
       <div className="flex items-center gap-2 min-w-[120px] justify-center">
-        <span className="text-sm font-semibold" style={{ color: 'var(--construction-charcoal)' }}>
+        <span className="text-sm font-semibold" style={{ color: 'white' }}>
           Page {currentPageNumber} of {totalPages}
         </span>
       </div>
@@ -118,11 +118,11 @@ export default function PageNavigation() {
         disabled={!canGoNext}
         className={`flex items-center justify-center w-8 h-8 rounded transition-all ${
           canGoNext 
-            ? 'hover:bg-gray-200 cursor-pointer' 
-            : 'opacity-30 cursor-not-allowed'
+            ? 'hover:bg-white/20 cursor-pointer' 
+            : 'opacity-50 cursor-not-allowed'
         }`}
         style={{
-          color: canGoNext ? 'var(--construction-charcoal)' : 'var(--construction-steel)'
+          color: canGoNext ? 'white' : 'rgba(255, 255, 255, 0.5)'
         }}
         title={canGoNext ? "Next page (→)" : "Last page"}
       >
@@ -132,7 +132,7 @@ export default function PageNavigation() {
       {/* Page Title */}
       {pageTemplate && (
         <div className="ml-4 pl-4 border-l" style={{ borderColor: 'var(--construction-steel)' }}>
-          <div className="text-xs font-medium truncate max-w-[200px]" style={{ color: 'var(--construction-charcoal)' }}>
+          <div className="text-xs font-medium truncate max-w-[200px]" style={{ color: 'white' }}>
             {pageTemplate.title || `Page ${currentPageNumber}`}
           </div>
         </div>

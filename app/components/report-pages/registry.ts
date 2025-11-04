@@ -27,6 +27,31 @@ import { buildReport022ViewModel } from "./report-022ViewModel";
 import { buildReport023ViewModel } from "./report-023ViewModel";
 import { buildReport024ViewModel } from "./report-024ViewModel";
 import { buildReport025ViewModel } from "./report-025ViewModel";
+import { buildReport026ViewModel } from "./report-026ViewModel";
+import { buildReport027ViewModel } from "./report-027ViewModel";
+import { buildReport028ViewModel } from "./report-028ViewModel";
+import { buildReport029ViewModel } from "./report-029ViewModel";
+import { buildReport030ViewModel } from "./report-030ViewModel";
+import { buildReport031ViewModel } from "./report-031ViewModel";
+import { buildReport032ViewModel } from "./report-032ViewModel";
+import { buildReport033ViewModel } from "./report-033ViewModel";
+import { buildReport034ViewModel } from "./report-034ViewModel";
+import { buildReport035ViewModel } from "./report-035ViewModel";
+import { buildReport036ViewModel } from "./report-036ViewModel";
+import { buildReport037ViewModel } from "./report-037ViewModel";
+import { buildReport038ViewModel } from "./report-038ViewModel";
+import { buildReport039ViewModel } from "./report-039ViewModel";
+import { buildReport040ViewModel } from "./report-040ViewModel";
+import { buildReport041ViewModel } from "./report-041ViewModel";
+import { buildReport042ViewModel } from "./report-042ViewModel";
+import { buildReport043ViewModel } from "./report-043ViewModel";
+import { buildReport044ViewModel } from "./report-044ViewModel";
+import { buildReport045ViewModel } from "./report-045ViewModel";
+import { buildReport046ViewModel } from "./report-046ViewModel";
+import { buildReport047ViewModel } from "./report-047ViewModel";
+import { buildReport048ViewModel } from "./report-048ViewModel";
+import { buildReport049ViewModel } from "./report-049ViewModel";
+import { buildReport050ViewModel } from "./report-050ViewModel";
 import { buildGenericViewModel } from "./viewModelFactory";
 import type { ReportTemplateDB } from "@/lib/types";
 
@@ -371,6 +396,331 @@ const customRegistry = {
       version: "1.0.0",
       fieldCount: 11,
       complexity: "intermediate"
+    }
+  },
+  "report-026": {
+    connected: dynamic(() => import("./ConnectedReport026"), { ssr: false }),
+    view: async () => (await import("./Report026View")).default,
+    viewModel: buildReport026ViewModel,
+    metadata: {
+      title: "Project Schedule Update",
+      description: "Custom project-documentation template with beautiful UI",
+      category: "project-documentation",
+      version: "1.0.0",
+      fieldCount: 8,
+      complexity: "simple"
+    }
+  },
+  "report-027": {
+    connected: dynamic(() => import("./ConnectedReport027"), { ssr: false }),
+    view: async () => (await import("./Report027View")).default,
+    viewModel: buildReport027ViewModel,
+    metadata: {
+      title: "Risk Assessment Register",
+      description: "Custom project-documentation template with beautiful UI",
+      category: "project-documentation",
+      version: "1.0.0",
+      fieldCount: 8,
+      complexity: "simple"
+    }
+  },
+  "report-028": {
+    connected: dynamic(() => import("./ConnectedReport028"), { ssr: false }),
+    view: async () => (await import("./Report028View")).default,
+    viewModel: buildReport028ViewModel,
+    metadata: {
+      title: "Stakeholder Communication Log",
+      description: "Custom project-documentation template with beautiful UI",
+      category: "project-documentation",
+      version: "1.0.0",
+      fieldCount: 9,
+      complexity: "simple"
+    }
+  },
+  "report-029": {
+    connected: dynamic(() => import("./ConnectedReport029"), { ssr: false }),
+    view: async () => (await import("./Report029View")).default,
+    viewModel: buildReport029ViewModel,
+    metadata: {
+      title: "Project Milestone Report",
+      description: "Custom project-documentation template with beautiful UI",
+      category: "project-documentation",
+      version: "1.0.0",
+      fieldCount: 9,
+      complexity: "simple"
+    }
+  },
+  "report-030": {
+    connected: dynamic(() => import("./ConnectedReport030"), { ssr: false }),
+    view: async () => (await import("./Report030View")).default,
+    viewModel: buildReport030ViewModel,
+    metadata: {
+      title: "Resource Allocation Summary",
+      description: "Custom project-documentation template with beautiful UI",
+      category: "project-documentation",
+      version: "1.0.0",
+      fieldCount: 8,
+      complexity: "simple"
+    }
+  },
+  "report-031": {
+    connected: dynamic(() => import("./ConnectedReport031"), { ssr: false }),
+    view: async () => (await import("./Report031View")).default,
+    viewModel: buildReport031ViewModel,
+    metadata: {
+      title: "Safety Training Record",
+      description: "Custom safety template with beautiful UI",
+      category: "safety",
+      version: "1.0.0",
+      fieldCount: 9,
+      complexity: "simple"
+    }
+  },
+  "report-032": {
+    connected: dynamic(() => import("./ConnectedReport032"), { ssr: false }),
+    view: async () => (await import("./Report032View")).default,
+    viewModel: buildReport032ViewModel,
+    metadata: {
+      title: "Toolbox Talk Documentation",
+      description: "Custom safety template with beautiful UI",
+      category: "safety",
+      version: "1.0.0",
+      fieldCount: 8,
+      complexity: "simple"
+    }
+  },
+  "report-033": {
+    connected: dynamic(() => import("./ConnectedReport033"), { ssr: false }),
+    view: async () => (await import("./Report033View")).default,
+    viewModel: buildReport033ViewModel,
+    metadata: {
+      title: "Safety Equipment Inspection",
+      description: "Custom safety template with beautiful UI",
+      category: "safety",
+      version: "1.0.0",
+      fieldCount: 8,
+      complexity: "simple"
+    }
+  },
+  "report-034": {
+    connected: dynamic(() => import("./ConnectedReport034"), { ssr: false }),
+    view: async () => (await import("./Report034View")).default,
+    viewModel: buildReport034ViewModel,
+    metadata: {
+      title: "Emergency Response Plan",
+      description: "Custom safety template with beautiful UI",
+      category: "safety",
+      version: "1.0.0",
+      fieldCount: 8,
+      complexity: "simple"
+    }
+  },
+  "report-035": {
+    connected: dynamic(() => import("./ConnectedReport035"), { ssr: false }),
+    view: async () => (await import("./Report035View")).default,
+    viewModel: buildReport035ViewModel,
+    metadata: {
+      title: "Safety Audit Report",
+      description: "Custom safety template with beautiful UI",
+      category: "safety",
+      version: "1.0.0",
+      fieldCount: 9,
+      complexity: "simple"
+    }
+  },
+  "report-036": {
+    connected: dynamic(() => import("./ConnectedReport036"), { ssr: false }),
+    view: async () => (await import("./Report036View")).default,
+    viewModel: buildReport036ViewModel,
+    metadata: {
+      title: "Purchase Order Log",
+      description: "Custom financial template with beautiful UI",
+      category: "financial",
+      version: "1.0.0",
+      fieldCount: 9,
+      complexity: "simple"
+    }
+  },
+  "report-037": {
+    connected: dynamic(() => import("./ConnectedReport037"), { ssr: false }),
+    view: async () => (await import("./Report037View")).default,
+    viewModel: buildReport037ViewModel,
+    metadata: {
+      title: "Invoice Tracking",
+      description: "Custom financial template with beautiful UI",
+      category: "financial",
+      version: "1.0.0",
+      fieldCount: 9,
+      complexity: "simple"
+    }
+  },
+  "report-038": {
+    connected: dynamic(() => import("./ConnectedReport038"), { ssr: false }),
+    view: async () => (await import("./Report038View")).default,
+    viewModel: buildReport038ViewModel,
+    metadata: {
+      title: "Cost Variance Analysis",
+      description: "Custom financial template with beautiful UI",
+      category: "financial",
+      version: "1.0.0",
+      fieldCount: 8,
+      complexity: "simple"
+    }
+  },
+  "report-039": {
+    connected: dynamic(() => import("./ConnectedReport039"), { ssr: false }),
+    view: async () => (await import("./Report039View")).default,
+    viewModel: buildReport039ViewModel,
+    metadata: {
+      title: "Payment Application",
+      description: "Custom financial template with beautiful UI",
+      category: "financial",
+      version: "1.0.0",
+      fieldCount: 9,
+      complexity: "simple"
+    }
+  },
+  "report-040": {
+    connected: dynamic(() => import("./ConnectedReport040"), { ssr: false }),
+    view: async () => (await import("./Report040View")).default,
+    viewModel: buildReport040ViewModel,
+    metadata: {
+      title: "Vendor Performance Review",
+      description: "Custom financial template with beautiful UI",
+      category: "financial",
+      version: "1.0.0",
+      fieldCount: 8,
+      complexity: "simple"
+    }
+  },
+  "report-041": {
+    connected: dynamic(() => import("./ConnectedReport041"), { ssr: false }),
+    view: async () => (await import("./Report041View")).default,
+    viewModel: buildReport041ViewModel,
+    metadata: {
+      title: "Material Testing Report",
+      description: "Custom technical template with beautiful UI",
+      category: "technical",
+      version: "1.0.0",
+      fieldCount: 10,
+      complexity: "simple"
+    }
+  },
+  "report-042": {
+    connected: dynamic(() => import("./ConnectedReport042"), { ssr: false }),
+    view: async () => (await import("./Report042View")).default,
+    viewModel: buildReport042ViewModel,
+    metadata: {
+      title: "Non-Conformance Report (NCR)",
+      description: "Custom quality-control template with beautiful UI",
+      category: "quality-control",
+      version: "1.0.0",
+      fieldCount: 10,
+      complexity: "simple"
+    }
+  },
+  "report-043": {
+    connected: dynamic(() => import("./ConnectedReport043"), { ssr: false }),
+    view: async () => (await import("./Report043View")).default,
+    viewModel: buildReport043ViewModel,
+    metadata: {
+      title: "Commissioning Checklist",
+      description: "Custom technical template with beautiful UI",
+      category: "technical",
+      version: "1.0.0",
+      fieldCount: 9,
+      complexity: "simple"
+    }
+  },
+  "report-044": {
+    connected: dynamic(() => import("./ConnectedReport044"), { ssr: false }),
+    view: async () => (await import("./Report044View")).default,
+    viewModel: buildReport044ViewModel,
+    metadata: {
+      title: "System Performance Test",
+      description: "Custom technical template with beautiful UI",
+      category: "technical",
+      version: "1.0.0",
+      fieldCount: 9,
+      complexity: "simple"
+    }
+  },
+  "report-045": {
+    connected: dynamic(() => import("./ConnectedReport045"), { ssr: false }),
+    view: async () => (await import("./Report045View")).default,
+    viewModel: buildReport045ViewModel,
+    metadata: {
+      title: "Technical Specification Review",
+      description: "Custom technical template with beautiful UI",
+      category: "technical",
+      version: "1.0.0",
+      fieldCount: 9,
+      complexity: "simple"
+    }
+  },
+  "report-046": {
+    connected: dynamic(() => import("./ConnectedReport046"), { ssr: false }),
+    view: async () => (await import("./Report046View")).default,
+    viewModel: buildReport046ViewModel,
+    metadata: {
+      title: "Correspondence Log",
+      description: "Custom project-documentation template with beautiful UI",
+      category: "project-documentation",
+      version: "1.0.0",
+      fieldCount: 9,
+      complexity: "simple"
+    }
+  },
+  "report-047": {
+    connected: dynamic(() => import("./ConnectedReport047"), { ssr: false }),
+    view: async () => (await import("./Report047View")).default,
+    viewModel: buildReport047ViewModel,
+    metadata: {
+      title: "Drawing Revision Log",
+      description: "Custom project-documentation template with beautiful UI",
+      category: "project-documentation",
+      version: "1.0.0",
+      fieldCount: 9,
+      complexity: "simple"
+    }
+  },
+  "report-048": {
+    connected: dynamic(() => import("./ConnectedReport048"), { ssr: false }),
+    view: async () => (await import("./Report048View")).default,
+    viewModel: buildReport048ViewModel,
+    metadata: {
+      title: "Permit Status Report",
+      description: "Custom project-documentation template with beautiful UI",
+      category: "project-documentation",
+      version: "1.0.0",
+      fieldCount: 9,
+      complexity: "simple"
+    }
+  },
+  "report-049": {
+    connected: dynamic(() => import("./ConnectedReport049"), { ssr: false }),
+    view: async () => (await import("./Report049View")).default,
+    viewModel: buildReport049ViewModel,
+    metadata: {
+      title: "Warranty Documentation",
+      description: "Custom project-documentation template with beautiful UI",
+      category: "project-documentation",
+      version: "1.0.0",
+      fieldCount: 9,
+      complexity: "simple"
+    }
+  },
+  "report-050": {
+    connected: dynamic(() => import("./ConnectedReport050"), { ssr: false }),
+    view: async () => (await import("./Report050View")).default,
+    viewModel: buildReport050ViewModel,
+    metadata: {
+      title: "Lessons Learned Report",
+      description: "Custom project-documentation template with beautiful UI",
+      category: "project-documentation",
+      version: "1.0.0",
+      fieldCount: 9,
+      complexity: "simple"
     }
   }
 } as const;

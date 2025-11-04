@@ -11,6 +11,7 @@ import SectionOutline from "./SectionOutline";
 import Toolbar from "./Toolbar";
 import PageForm from "./PageForm";
 import PagePreview from "./PagePreview";
+import PageNavigation from "./PageNavigation";
 
 // Saving indicator component
 function SavingIndicator() {
@@ -269,11 +270,17 @@ export default function EditorShell() {
       {/* Professional Preview Area */}
       <section className="border-l overflow-auto bg-gray-100" style={{ borderColor: 'var(--construction-steel)' }}>
         <div className="p-6">
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-4 flex items-center justify-between gap-4">
             <h2 className="text-xl font-semibold tracking-tight" style={{ color: 'var(--construction-charcoal)' }}>Live Preview</h2>
-            <div className="flex items-center space-x-2 text-xs" style={{ color: 'var(--construction-steel)' }}>
-              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--construction-orange)' }}></div>
-              <span>Auto-save enabled</span>
+            <div className="flex items-center gap-4">
+              {/* Page Navigation */}
+              <PageNavigation />
+              
+              {/* Auto-save indicator */}
+              <div className="flex items-center space-x-2 text-xs" style={{ color: 'var(--construction-steel)' }}>
+                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--construction-orange)' }}></div>
+                <span>Auto-save enabled</span>
+              </div>
             </div>
           </div>
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 shadow-lg">

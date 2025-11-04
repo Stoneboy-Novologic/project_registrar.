@@ -1,0 +1,128 @@
+{
+  "layers": {
+    "frontend": [
+      "unknown",
+      "app",
+      "editor",
+      "report-components",
+      "report-pages",
+      "report-primitives",
+      "docs"
+    ],
+    "api": [
+      "export",
+      "reports",
+      "templates",
+      "shared"
+    ],
+    "config": [
+      "prisma"
+    ]
+  },
+  "circularDependencies": [],
+  "coupling": [
+    {
+      "module": "app",
+      "dependencies": 1,
+      "dependents": 5,
+      "couplingScore": 6
+    },
+    {
+      "module": "shared",
+      "dependencies": 0,
+      "dependents": 5,
+      "couplingScore": 5
+    },
+    {
+      "module": "reports",
+      "dependencies": 2,
+      "dependents": 0,
+      "couplingScore": 2
+    },
+    {
+      "module": "editor",
+      "dependencies": 2,
+      "dependents": 0,
+      "couplingScore": 2
+    },
+    {
+      "module": "report-pages",
+      "dependencies": 2,
+      "dependents": 0,
+      "couplingScore": 2
+    },
+    {
+      "module": "export",
+      "dependencies": 1,
+      "dependents": 0,
+      "couplingScore": 1
+    },
+    {
+      "module": "templates",
+      "dependencies": 1,
+      "dependents": 0,
+      "couplingScore": 1
+    },
+    {
+      "module": "report-components",
+      "dependencies": 1,
+      "dependents": 0,
+      "couplingScore": 1
+    },
+    {
+      "module": "unknown",
+      "dependencies": 0,
+      "dependents": 0,
+      "couplingScore": 0
+    },
+    {
+      "module": "report-primitives",
+      "dependencies": 0,
+      "dependents": 0,
+      "couplingScore": 0
+    },
+    {
+      "module": "docs",
+      "dependencies": 0,
+      "dependents": 0,
+      "couplingScore": 0
+    },
+    {
+      "module": "prisma",
+      "dependencies": 0,
+      "dependents": 0,
+      "couplingScore": 0
+    }
+  ],
+  "dependencyGraph": {
+    "unknown": [],
+    "export": [
+      "app"
+    ],
+    "reports": [
+      "shared",
+      "app"
+    ],
+    "templates": [
+      "shared"
+    ],
+    "app": [
+      "shared"
+    ],
+    "editor": [
+      "shared",
+      "app"
+    ],
+    "report-components": [
+      "app"
+    ],
+    "report-pages": [
+      "shared",
+      "app"
+    ],
+    "report-primitives": [],
+    "docs": [],
+    "shared": [],
+    "prisma": []
+  }
+}

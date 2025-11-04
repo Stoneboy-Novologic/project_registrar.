@@ -1,0 +1,100 @@
+/**
+ * @file report-013.css
+ * @module styles
+ * @description Styles for Site Photos Documentation report component
+ * @author BharatERP
+ * @created 2025-01-27
+ */
+
+.report013-report {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.report013-report .report-header {
+  background: linear-gradient(135deg, #007bff, #007bffdd);
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+
+.report013-report .report-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0 0 1rem 0;
+}
+
+.report013-report .category-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: rgba(255,255,255,0.2);
+  border-radius: 20px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.report013-report .report-content {
+  padding: 2rem;
+}
+
+.report013-report .section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  border-left: 4px solid #007bff;
+  background: #f8f9fa;
+  border-radius: 0 8px 8px 0;
+}
+
+.report013-report .section-title {
+  color: #007bff;
+  font-size: 1.5rem;
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+}
+
+.report013-report .field-group {
+  margin-bottom: 1rem;
+}
+
+.report013-report .field-label {
+  display: block;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.report013-report .field-value {
+  padding: 0.75rem;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.report013-report .field-value.multiline {
+  min-height: 4rem;
+  align-items: flex-start;
+  white-space: pre-wrap;
+}
+
+.report013-report .field-value.image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.report013-report .report-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+

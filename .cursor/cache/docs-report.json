@@ -1,0 +1,302 @@
+{
+  "scanDate": "2025-11-04T09:30:50.929Z",
+  "totalDocs": 14,
+  "validDocs": 14,
+  "invalidDocs": 0,
+  "outdatedDocs": 0,
+  "validationResults": [
+    {
+      "file": "README.doc.md",
+      "metadata": {
+        "file": "README.doc.md",
+        "description": "/ <reference types=\"next\" />",
+        "layer": "frontend",
+        "dependencies": [],
+        "status": "draft",
+        "last_updated": "2025-11-04"
+      },
+      "issues": [],
+      "isValid": true
+    },
+    {
+      "file": "app/app.doc.md",
+      "metadata": {
+        "file": "app.doc.md",
+        "description": "Use Sidebar",
+        "layer": "frontend",
+        "dependencies": [],
+        "status": "draft",
+        "last_updated": "2025-11-04"
+      },
+      "issues": [],
+      "isValid": true
+    },
+    {
+      "file": "app/components/editor/editor.doc.md",
+      "metadata": {
+        "file": "editor.doc.md",
+        "description": "Attachments Input",
+        "layer": "frontend",
+        "dependencies": [],
+        "status": "draft",
+        "last_updated": "2025-11-04"
+      },
+      "issues": [
+        {
+          "type": "dependency_mismatch",
+          "severity": "warning",
+          "message": "Documentation missing 14 dependency(ies) found in code",
+          "details": {
+            "missing": [
+              "@/lib/store",
+              "@/lib/types",
+              "@/lib/validation",
+              "@/lib/log",
+              "@/app/data/templates/default-v1/report-01.json",
+              "./SectionOutline",
+              "./Toolbar",
+              "./PageForm",
+              "./PagePreview",
+              "./AttachmentsInput",
+              "./AuthorsInput",
+              "./ContentsInput",
+              "./FieldInput",
+              "@/app/components/report-pages/registry"
+            ]
+          }
+        }
+      ],
+      "isValid": true
+    },
+    {
+      "file": "app/components/report/report-components.doc.md",
+      "metadata": {
+        "file": "report-components.doc.md",
+        "description": "Cluster",
+        "layer": "frontend",
+        "dependencies": [],
+        "status": "draft",
+        "last_updated": "2025-11-04"
+      },
+      "issues": [
+        {
+          "type": "dependency_mismatch",
+          "severity": "warning",
+          "message": "Documentation missing 6 dependency(ies) found in code",
+          "details": {
+            "missing": [
+              "@/app/components/report/page",
+              "@/app/components/report/text",
+              "@/app/components/report/stack",
+              "@/app/components/report/section",
+              "@/app/components/report/rule",
+              "@/app/components/report/badge"
+            ]
+          }
+        }
+      ],
+      "isValid": true
+    },
+    {
+      "file": "app/components/report-pages/report-pages.doc.md",
+      "metadata": {
+        "file": "report-pages.doc.md",
+        "description": "app/components/report-pages/ConnectedReport006.tsx",
+        "layer": "frontend",
+        "dependencies": [],
+        "status": "draft",
+        "last_updated": "2025-11-04"
+      },
+      "issues": [
+        {
+          "type": "dependency_mismatch",
+          "severity": "warning",
+          "message": "Documentation missing 6 dependency(ies) found in code",
+          "details": {
+            "missing": [
+              "@/app/components/report/page",
+              "@/app/components/report/text",
+              "@/app/components/report/stack",
+              "@/app/components/report/section",
+              "@/app/components/report/rule",
+              "@/app/components/report/badge"
+            ]
+          }
+        }
+      ],
+      "isValid": true
+    },
+    {
+      "file": "app/components/report-primitives/report-primitives.doc.md",
+      "metadata": {
+        "file": "report-primitives.doc.md",
+        "description": "Green circular background",
+        "layer": "frontend",
+        "dependencies": [],
+        "status": "draft",
+        "last_updated": "2025-11-04"
+      },
+      "issues": [
+        {
+          "type": "dependency_mismatch",
+          "severity": "warning",
+          "message": "Documentation missing 6 dependency(ies) found in code",
+          "details": {
+            "missing": [
+              "@/app/components/report/page",
+              "@/app/components/report/text",
+              "@/app/components/report/stack",
+              "@/app/components/report/section",
+              "@/app/components/report/rule",
+              "@/app/components/report/badge"
+            ]
+          }
+        }
+      ],
+      "isValid": true
+    },
+    {
+      "file": "app/data/templates/default-v1/templates.doc.md",
+      "metadata": {
+        "file": "templates.doc.md",
+        "description": "app/api/templates/[id]/route.ts",
+        "layer": "api",
+        "dependencies": [],
+        "status": "draft",
+        "last_updated": "2025-11-04"
+      },
+      "issues": [],
+      "isValid": true
+    },
+    {
+      "file": "app/export.doc.md",
+      "metadata": {
+        "file": "export.doc.md",
+        "description": "Placeholder PDF route; final rendering will be implemented later using Playwright.",
+        "layer": "api",
+        "dependencies": [],
+        "status": "draft",
+        "last_updated": "2025-11-04"
+      },
+      "issues": [],
+      "isValid": true
+    },
+    {
+      "file": "app/reports.doc.md",
+      "metadata": {
+        "file": "reports.doc.md",
+        "description": "app/api/reports/[id]/pages/[pageId]/route.ts",
+        "layer": "api",
+        "dependencies": [],
+        "status": "draft",
+        "last_updated": "2025-11-04"
+      },
+      "issues": [],
+      "isValid": true
+    },
+    {
+      "file": "docs/docs.doc.md",
+      "metadata": {
+        "file": "docs.doc.md",
+        "description": "Page Registry",
+        "layer": "frontend",
+        "dependencies": [],
+        "status": "draft",
+        "last_updated": "2025-11-04"
+      },
+      "issues": [],
+      "isValid": true
+    },
+    {
+      "file": "docs/editor/docs.doc.md",
+      "metadata": {
+        "file": "docs.doc.md",
+        "description": "Page Registry",
+        "layer": "frontend",
+        "dependencies": [],
+        "status": "draft",
+        "last_updated": "2025-11-04"
+      },
+      "issues": [],
+      "isValid": true
+    },
+    {
+      "file": "lib/api/shared.doc.md",
+      "metadata": {
+        "file": "shared.doc.md",
+        "description": "lib/api/reports.ts",
+        "layer": "api",
+        "dependencies": [],
+        "status": "draft",
+        "last_updated": "2025-11-04"
+      },
+      "issues": [
+        {
+          "type": "dependency_mismatch",
+          "severity": "warning",
+          "message": "Documentation missing 6 dependency(ies) found in code",
+          "details": {
+            "missing": [
+              "@/lib/types",
+              "./types",
+              "./log",
+              "./persistence",
+              "./api/reports",
+              "./api/templates"
+            ]
+          }
+        }
+      ],
+      "isValid": true
+    },
+    {
+      "file": "lib/shared.doc.md",
+      "metadata": {
+        "file": "shared.doc.md",
+        "description": "lib/api/reports.ts",
+        "layer": "api",
+        "dependencies": [],
+        "status": "draft",
+        "last_updated": "2025-11-04"
+      },
+      "issues": [],
+      "isValid": true
+    },
+    {
+      "file": "prisma/prisma.doc.md",
+      "metadata": {
+        "file": "prisma.doc.md",
+        "description": "prisma/seed.ts",
+        "layer": "config",
+        "dependencies": [],
+        "status": "draft",
+        "last_updated": "2025-11-04"
+      },
+      "issues": [
+        {
+          "type": "dependency_mismatch",
+          "severity": "warning",
+          "message": "Documentation missing 6 dependency(ies) found in code",
+          "details": {
+            "missing": [
+              "../lib/types",
+              "../app/data/templates/default-v1/report-01.json",
+              "../app/data/templates/default-v1/report-02.json",
+              "../app/data/templates/default-v1/report-03.json",
+              "../app/data/templates/default-v1/report-04.json",
+              "../app/data/templates/default-v1/report-05.json"
+            ]
+          }
+        }
+      ],
+      "isValid": true
+    }
+  ],
+  "summary": {
+    "missingMetadata": 0,
+    "invalidPaths": 0,
+    "outdatedContent": 0,
+    "dependencyMismatches": 6,
+    "formatErrors": 0
+  }
+}

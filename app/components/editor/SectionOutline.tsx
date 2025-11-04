@@ -19,6 +19,7 @@ export default function SectionOutline() {
   const [searchTerm, setSearchTerm] = useState("");
   const [draggedPageId, setDraggedPageId] = useState<string | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const toggleSection = (section: string) => {
     setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
@@ -114,8 +115,14 @@ export default function SectionOutline() {
 
   // Handle drag and drop for page reordering
   const handleDragStart = (e: React.DragEvent, pageId: string) => {
+    setIsDragging(true);
     setDraggedPageId(pageId);
     e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+    setDraggedPageId(null);
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -125,13 +132,20 @@ export default function SectionOutline() {
 
   const handleDrop = async (e: React.DragEvent, targetPageId: string) => {
     e.preventDefault();
-    if (!draggedPageId || draggedPageId === targetPageId || !currentReport) return;
+    setIsDragging(false);
+    if (!draggedPageId || draggedPageId === targetPageId || !currentReport) {
+      setDraggedPageId(null);
+      return;
+    }
 
     const currentOrder = [...reportPages].sort((a, b) => a.pageOrder - b.pageOrder);
     const draggedIndex = currentOrder.findIndex(p => p.id === draggedPageId);
     const targetIndex = currentOrder.findIndex(p => p.id === targetPageId);
 
-    if (draggedIndex === -1 || targetIndex === -1) return;
+    if (draggedIndex === -1 || targetIndex === -1) {
+      setDraggedPageId(null);
+      return;
+    }
 
     // Reorder array
     const newOrder = [...currentOrder];
@@ -215,31 +229,50 @@ export default function SectionOutline() {
                     [...reportPages].sort((a, b) => a.pageOrder - b.pageOrder).map((page) => {
                       const isActive = currentPageId === page.id;
                       const pageTemplate = page.template;
+                      const isPageDragging = draggedPageId === page.id;
+                      
                       return (
                         <div
                           key={page.id}
                           draggable
                           onDragStart={(e) => handleDragStart(e, page.id)}
+                          onDragEnd={handleDragEnd}
                           onDragOver={handleDragOver}
                           onDrop={(e) => handleDrop(e, page.id)}
-                          className={`group relative flex items-center gap-2 px-3 py-2 rounded-lg border transition-all duration-200 cursor-move ${
+                          className={`group relative flex items-center gap-2 px-3 py-2 rounded-lg border transition-all duration-200 ${
+                            isPageDragging ? "cursor-grabbing opacity-50" : "cursor-pointer"
+                          } ${
                             isActive ? "shadow-md" : "hover:shadow-sm"
-                          } ${draggedPageId === page.id ? "opacity-50" : ""}`}
+                          }`}
                           style={{
                             backgroundColor: isActive ? 'var(--construction-concrete)' : 'var(--construction-charcoal)',
                             borderColor: isActive ? 'var(--construction-orange)' : 'var(--construction-steel)',
                             boxShadow: isActive ? '0 0 0 2px rgba(255, 107, 53, 0.2)' : 'none'
                           }}
-                          onClick={() => switchToPage(page.id)}
+                          onClick={(e) => {
+                            // Only switch if not dragging and didn't click on delete button
+                            if (!isDragging && !(e.target as HTMLElement).closest('button')) {
+                              switchToPage(page.id).catch(err => {
+                                logError("Failed to switch to page", err);
+                              });
+                            }
+                          }}
                         >
                           {/* Drag Handle */}
-                          <div className="flex-shrink-0 cursor-grab active:cursor-grabbing" style={{ color: 'var(--construction-steel)' }}>
+                          <div 
+                            className="flex-shrink-0 cursor-grab active:cursor-grabbing" 
+                            style={{ color: 'var(--construction-steel)' }}
+                            onMouseDown={(e) => {
+                              // Prevent click when starting drag from handle
+                              e.stopPropagation();
+                            }}
+                          >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
                             </svg>
                           </div>
 
-                          {/* Page Info */}
+                          {/* Page Info - Clickable area */}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
                               <div className="w-2 h-2 rounded-full transition-colors" style={{
@@ -257,7 +290,10 @@ export default function SectionOutline() {
 
                           {/* Delete Button */}
                           <button
-                            onClick={(e) => handleDeleteClick(e, page.id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteClick(e, page.id);
+                            }}
                             className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-red-500/20"
                             style={{ color: 'var(--construction-steel)' }}
                             title="Delete page"

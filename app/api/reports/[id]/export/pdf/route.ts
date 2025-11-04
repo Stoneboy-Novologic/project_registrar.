@@ -34,10 +34,11 @@ export async function GET(
   try {
     // Parse query parameters
     const { searchParams } = new URL(request.url);
+    // Convert null to undefined for optional parameters
     const queryParams = {
-      includeWatermark: searchParams.get('includeWatermark'),
-      includeBranding: searchParams.get('includeBranding'),
-      pages: searchParams.get('pages')
+      includeWatermark: searchParams.get('includeWatermark') ?? undefined,
+      includeBranding: searchParams.get('includeBranding') ?? undefined,
+      pages: searchParams.get('pages') ?? undefined
     };
     
     const validatedParams = ExportPDFSchema.parse(queryParams);

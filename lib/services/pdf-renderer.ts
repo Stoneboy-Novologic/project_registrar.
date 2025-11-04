@@ -58,7 +58,7 @@ function renderGenericTemplateHTML(
       const value = values[field.id];
       if (value) {
         html += `<div style="margin-bottom: 0.5rem;">`;
-        html += `<strong>${field.label}:</strong> ${escapeHtml(value)}`;
+        html += `<strong style="font-weight: 600; color: #495057;">${field.label}:</strong> <span style="color: #1A1A1A;">${escapeHtml(value)}</span>`;
         html += `</div>`;
       }
     });
@@ -82,7 +82,11 @@ function renderGenericTemplateHTML(
       
       switch (field.type) {
         case 'image':
-          html += `<img src="${escapeHtml(value)}" alt="${field.label}" style="max-width: 100%; height: auto; border-radius: 4px;" />`;
+          // Handle both base64 and URL images
+          const imageSrc = value.startsWith('data:') || value.startsWith('http') || value.startsWith('/') 
+            ? escapeHtml(value) 
+            : `data:image/png;base64,${escapeHtml(value)}`;
+          html += `<img src="${imageSrc}" alt="${field.label}" style="max-width: 100%; height: auto; border-radius: 4px; margin-top: 0.5rem; display: block;" onerror="this.style.display='none';" />`;
           break;
         case 'multiline':
           html += `<div style="white-space: pre-wrap;">${escapeHtml(value)}</div>`;

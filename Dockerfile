@@ -61,6 +61,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
+# Ensure pnpm is available in builder stage
+RUN corepack enable && corepack prepare pnpm@latest --activate || npm install -g pnpm@latest
+
 # Copy dependencies from deps stage
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/package.json ./package.json
@@ -81,7 +84,7 @@ RUN echo "=========================================" && \
     PLAYWRIGHT_SUCCESS=false && \
     for i in 1 2 3 4; do \
         echo "Attempt $i of 4..." && \
-        if pnpm exec playwright install chromium --with-deps 2>&1; then \
+        if npx playwright install chromium --with-deps 2>&1; then \
             echo "✓ Playwright installed successfully on attempt $i" && \
             PLAYWRIGHT_SUCCESS=true && \
             break; \

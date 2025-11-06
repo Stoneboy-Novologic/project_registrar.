@@ -43,6 +43,7 @@ RUN npm install -g pnpm@latest || \
     (echo "Error: Failed to install pnpm" && exit 1)
 
 # Install dependencies with error handling
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 RUN echo "Installing dependencies..." && \
     pnpm install --frozen-lockfile || \
     (echo "Error: Dependency installation failed" && exit 1) && \
@@ -76,34 +77,31 @@ RUN test -f prisma/schema.prisma || (echo "Error: prisma/schema.prisma not found
 
 # Install Playwright browsers (Chromium) with robust retry logic
 # This is non-blocking - build will continue even if Playwright installation fails
-RUN echo "=========================================" && \
-    echo "Installing Playwright Chromium..." && \
-    echo "=========================================" && \
-    export PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright && \
-    mkdir -p /root/.cache/ms-playwright && \
-    PLAYWRIGHT_SUCCESS=false && \
+ENV PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright
+RUN set -eux; \
+    echo "========================================="; \
+    echo "Installing Playwright Chromium..."; \
+    echo "========================================="; \
+    mkdir -p "$PLAYWRIGHT_BROWSERS_PATH"; \
+    PLAYWRIGHT_SUCCESS=false; \
     for i in 1 2 3 4; do \
-        echo "Attempt $i of 4..." && \
-        if npx playwright install chromium --with-deps 2>&1; then \
-            echo "✓ Playwright installed successfully on attempt $i" && \
-            PLAYWRIGHT_SUCCESS=true && \
-            break; \
-        else \
-            echo "✗ Attempt $i failed (this is non-fatal)" && \
-            if [ $i -lt 4 ]; then \
-                sleep $((i * 5)); \
-                echo "Retrying in $((i * 5)) seconds..."; \
-            fi; \
-        fi; \
-    done && \
+      echo "Attempt $i of 4..."; \
+      if npx playwright install chromium --with-deps; then \
+        echo "✓ Playwright installed successfully on attempt $i"; \
+        PLAYWRIGHT_SUCCESS=true; \
+        break; \
+      else \
+        echo "✗ Attempt $i failed (this is non-fatal)"; \
+        sleep $((i * 5)); \
+      fi; \
+    done; \
     if [ "$PLAYWRIGHT_SUCCESS" = "false" ]; then \
-        echo "⚠ Warning: Playwright Chromium installation failed after all attempts" && \
-        echo "⚠ This is non-fatal - the application will still build" && \
-        echo "⚠ Playwright can be installed at runtime if PDF generation is needed" && \
-        mkdir -p /root/.cache/ms-playwright; \
-    else \
-        echo "✓ Playwright Chromium verified and ready"; \
-    fi || true
+      echo "⚠ Warning: Playwright Chromium installation failed after all attempts"; \
+      echo "⚠ This is non-fatal - the application will still build"; \
+      echo "⚠ Playwright can be installed at runtime if PDF generation is needed"; \
+      mkdir -p "$PLAYWRIGHT_BROWSERS_PATH"; \
+    fi; \
+    true
 
 # Generate Prisma Client (doesn't need DATABASE_URL, just generates types)
 # Set a dummy DATABASE_URL to avoid any potential issues
@@ -127,6 +125,7 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV PLAYWRIGHT_BROWSERS_PATH=/home/nextjs/.cache/ms-playwright
 
 # Install runtime dependencies for Playwright with error handling
 RUN echo "Installing runtime dependencies..." && \

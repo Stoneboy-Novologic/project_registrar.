@@ -170,11 +170,8 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
 
-# Copy Prisma client and Playwright (standalone includes minimal node_modules)
-# We need to ensure Prisma and Playwright are available
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
-COPY --from=builder /app/node_modules/playwright ./node_modules/playwright
+# Standalone already includes required node_modules
+# No additional copies from /app/node_modules are needed here
 
 # Copy Playwright browsers to user-accessible location
 # The directory is guaranteed to exist in builder (created even if installation failed)

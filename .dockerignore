@@ -72,3 +72,10 @@ scripts
 .DS_Store
 Thumbs.db
 
+# Playwright cache (will be installed during build)
+# .cache/ms-playwright
+
+# Backups
+backups
+*.sql
+*.sql.gz

@@ -2,8 +2,9 @@
 # Stage 1: Dependencies
 FROM node:20-slim AS deps
 
-# Install system dependencies for Playwright
-RUN apt-get update && apt-get install -y \
+# Install system dependencies for Playwright with error handling
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     wget \
     gnupg \
     ca-certificates \
@@ -28,7 +29,9 @@ RUN apt-get update && apt-get install -y \
     xdg-utils \
     libu2f-udev \
     libvulkan1 \
-    && rm -rf /var/lib/apt/lists/*
+    curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
 
 WORKDIR /app
 
@@ -36,15 +39,27 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
 
 # Install pnpm if not available
-RUN npm install -g pnpm@latest
+RUN npm install -g pnpm@latest || \
+    (echo "Error: Failed to install pnpm" && exit 1)
 
-# Install dependencies
-RUN pnpm install --frozen-lockfile
+# Install dependencies with error handling
+RUN echo "Installing dependencies..." && \
+    pnpm install --frozen-lockfile || \
+    (echo "Error: Dependency installation failed" && exit 1) && \
+    echo "Dependencies installed successfully"
 
 # Stage 2: Builder
 FROM node:20-slim AS builder
 
 WORKDIR /app
+
+# Install additional build dependencies including timeout command
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    coreutils \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
 
 # Copy dependencies from deps stage
 COPY --from=deps /app/node_modules ./node_modules
@@ -56,19 +71,50 @@ COPY . .
 # Verify Prisma schema exists
 RUN test -f prisma/schema.prisma || (echo "Error: prisma/schema.prisma not found" && exit 1)
 
-# Install Playwright browsers (Chromium)
-RUN npx playwright install chromium --with-deps || true
+# Install Playwright browsers (Chromium) with robust retry logic
+# This is non-blocking - build will continue even if Playwright installation fails
+RUN echo "=========================================" && \
+    echo "Installing Playwright Chromium..." && \
+    echo "=========================================" && \
+    export PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright && \
+    mkdir -p /root/.cache/ms-playwright && \
+    PLAYWRIGHT_SUCCESS=false && \
+    for i in 1 2 3 4; do \
+        echo "Attempt $i of 4..." && \
+        if pnpm exec playwright install chromium --with-deps 2>&1; then \
+            echo "✓ Playwright installed successfully on attempt $i" && \
+            PLAYWRIGHT_SUCCESS=true && \
+            break; \
+        else \
+            echo "✗ Attempt $i failed (this is non-fatal)" && \
+            if [ $i -lt 4 ]; then \
+                sleep $((i * 5)); \
+                echo "Retrying in $((i * 5)) seconds..."; \
+            fi; \
+        fi; \
+    done && \
+    if [ "$PLAYWRIGHT_SUCCESS" = "false" ]; then \
+        echo "⚠ Warning: Playwright Chromium installation failed after all attempts" && \
+        echo "⚠ This is non-fatal - the application will still build" && \
+        echo "⚠ Playwright can be installed at runtime if PDF generation is needed"; \
+    else \
+        echo "✓ Playwright Chromium verified and ready"; \
+    fi || true
 
 # Generate Prisma Client (doesn't need DATABASE_URL, just generates types)
 # Set a dummy DATABASE_URL to avoid any potential issues
 ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
 RUN echo "Generating Prisma Client..." && \
-    pnpm exec prisma generate && \
+    pnpm exec prisma generate || \
+    (echo "Error: Prisma generate failed" && exit 1) && \
     echo "Prisma Client generated successfully"
 
 # Build Next.js application
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN pnpm build
+RUN echo "Building Next.js application..." && \
+    pnpm build || \
+    (echo "Error: Next.js build failed" && exit 1) && \
+    echo "Next.js build completed successfully"
 
 # Stage 3: Runner (Production)
 FROM node:20-slim AS runner
@@ -78,8 +124,10 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Install runtime dependencies for Playwright
-RUN apt-get update && apt-get install -y \
+# Install runtime dependencies for Playwright with error handling
+RUN echo "Installing runtime dependencies..." && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
     wget \
     gnupg \
     ca-certificates \
@@ -104,7 +152,10 @@ RUN apt-get update && apt-get install -y \
     xdg-utils \
     libu2f-udev \
     libvulkan1 \
-    && rm -rf /var/lib/apt/lists/*
+    curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean \
+    && echo "✓ Runtime dependencies installed"
 
 # Create non-root user
 RUN groupadd --system --gid 1001 nodejs && \
@@ -122,15 +173,17 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/node_modules/playwright ./node_modules/playwright
 
-# Copy Playwright browsers to user-accessible location
-COPY --from=builder /root/.cache/ms-playwright /home/nextjs/.cache/ms-playwright
+# Copy Playwright browsers to user-accessible location (if they exist)
+RUN mkdir -p /home/nextjs/.cache
+COPY --from=builder --chown=nextjs:nodejs /root/.cache/ms-playwright /home/nextjs/.cache/ms-playwright 2>/dev/null || \
+    echo "Warning: Playwright browsers not found, will be installed at runtime if needed"
 
 # Copy Prisma schema for migrations (if needed)
 COPY --from=builder /app/prisma ./prisma
 
 # Set correct permissions
 RUN chown -R nextjs:nodejs /app && \
-    chown -R nextjs:nodejs /home/nextjs/.cache
+    chown -R nextjs:nodejs /home/nextjs/.cache || true
 
 USER nextjs
 

@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Output standalone for Docker
+  output: 'standalone',
   // Ignore TypeScript errors during build
   typescript: {
     ignoreBuildErrors: true,

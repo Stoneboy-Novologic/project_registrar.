@@ -14,7 +14,14 @@
       "db:push": "prisma db push",
       "db:seed": "tsx prisma/seed.ts",
       "db:seed:additional": "DATABASE_URL=\"postgresql://admin:admin123@ec2-18-61-254-86.ap-south-2.compute.amazonaws.com:5432/project-register-report-stoneboy?schema=public\" tsx prisma/seed-additional.ts",
-      "db:reset": "prisma db push --force-reset && pnpm db:seed"
+      "db:reset": "prisma db push --force-reset && pnpm db:seed",
+      "docker:build": "docker build -t editor-test-app .",
+      "docker:run": "docker-compose up -d",
+      "docker:stop": "docker-compose down",
+      "docker:logs": "docker-compose logs -f",
+      "docker:prod": "docker-compose -f docker-compose.prod.yml up -d",
+      "docker:prod:stop": "docker-compose -f docker-compose.prod.yml down",
+      "docker:prod:logs": "docker-compose -f docker-compose.prod.yml logs -f"
     },
     "prisma": {
       "seed": "tsx prisma/seed.ts"

@@ -222,24 +222,85 @@ Comprehensive documentation is available in the `docs/` directory:
 
 ## 🚀 Deployment
 
+### AWS EC2 Deployment (Recommended)
+
+This application is configured for deployment on AWS EC2 with Docker, PostgreSQL, and Nginx.
+
+#### Quick Start
+1. Launch EC2 instance (Ubuntu 22.04 LTS, t3.medium or larger)
+2. SSH into instance and clone repository
+3. Run `./scripts/setup-server.sh` for initial setup
+4. Configure `.env.production` with your environment variables
+5. Run `./scripts/deploy.sh` to deploy
+
+#### Detailed Guides
+- [AWS EC2 Deployment Guide](./docs/aws-ec2-deployment.md) - Complete deployment instructions
+- [Server Setup Guide](./docs/server-setup-guide.md) - Step-by-step EC2 setup
+
+#### Deployment Scripts
+- `scripts/setup-server.sh` - Initial server setup (Docker, Nginx, etc.)
+- `scripts/deploy.sh` - Main deployment script
+- `scripts/update-app.sh` - Zero-downtime updates
+- `scripts/backup-db.sh` - Database backup
+- `scripts/restore-db.sh` - Database restore
+- `scripts/migrate-db.sh` - Run database migrations
+- `scripts/health-check.sh` - Health check
+- `scripts/install-ssl.sh` - SSL certificate installation
+
+#### Docker Deployment
+```bash
+# Build and run with Docker Compose
+docker-compose -f docker-compose.prod.yml up -d
+
+# View logs
+docker-compose -f docker-compose.prod.yml logs -f
+
+# Stop services
+docker-compose -f docker-compose.prod.yml down
+```
+
 ### Environment Variables
 ```env
-DATABASE_URL="postgresql://username:password@host:port/database"
-NEXTAUTH_SECRET="your-secret-key"
-NEXTAUTH_URL="https://your-domain.com"
+# Database Configuration
+POSTGRES_USER=admin
+POSTGRES_PASSWORD=your-secure-password
+POSTGRES_DB=editor_db
+DATABASE_URL="postgresql://admin:password@postgres:5432/editor_db?schema=public"
+
+# Application
+NODE_ENV=production
+PORT=3000
+HOSTNAME=0.0.0.0
+
+# PDF Configuration (optional)
+PDF_COMPANY_NAME=BharatERP
+PDF_WATERMARK_TEXT=CONFIDENTIAL
+```
+
+### Local Development
+
+#### Prerequisites
+- Node.js 18+
+- PostgreSQL 14+
+- pnpm (recommended) or npm
+
+#### Setup
+```bash
+# Install dependencies
+pnpm install
+
+# Set up database
+DATABASE_URL="postgresql://username:password@localhost:5432/report_editor" pnpm db:push
+pnpm db:seed
+
+# Start development server
+pnpm dev
 ```
 
 ### Production Build
 ```bash
 pnpm build
 pnpm start
-```
-
-### Database Setup
-```bash
-# In production
-pnpm db:push
-pnpm db:seed
 ```
 
 ## 🤝 Contributing

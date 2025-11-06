@@ -53,11 +53,18 @@ COPY --from=deps /app/package.json ./package.json
 # Copy application code
 COPY . .
 
+# Verify Prisma schema exists
+RUN test -f prisma/schema.prisma || (echo "Error: prisma/schema.prisma not found" && exit 1)
+
 # Install Playwright browsers (Chromium)
 RUN npx playwright install chromium --with-deps || true
 
-# Generate Prisma Client
-RUN npx prisma generate
+# Generate Prisma Client (doesn't need DATABASE_URL, just generates types)
+# Set a dummy DATABASE_URL to avoid any potential issues
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
+RUN echo "Generating Prisma Client..." && \
+    pnpm exec prisma generate && \
+    echo "Prisma Client generated successfully"
 
 # Build Next.js application
 ENV NEXT_TELEMETRY_DISABLED=1

@@ -96,7 +96,8 @@ RUN echo "=========================================" && \
     if [ "$PLAYWRIGHT_SUCCESS" = "false" ]; then \
         echo "⚠ Warning: Playwright Chromium installation failed after all attempts" && \
         echo "⚠ This is non-fatal - the application will still build" && \
-        echo "⚠ Playwright can be installed at runtime if PDF generation is needed"; \
+        echo "⚠ Playwright can be installed at runtime if PDF generation is needed" && \
+        mkdir -p /root/.cache/ms-playwright; \
     else \
         echo "✓ Playwright Chromium verified and ready"; \
     fi || true
@@ -173,10 +174,16 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/node_modules/playwright ./node_modules/playwright
 
-# Copy Playwright browsers to user-accessible location (if they exist)
+# Copy Playwright browsers to user-accessible location
+# The directory is guaranteed to exist in builder (created even if installation failed)
 RUN mkdir -p /home/nextjs/.cache
-COPY --from=builder --chown=nextjs:nodejs /root/.cache/ms-playwright /home/nextjs/.cache/ms-playwright 2>/dev/null || \
-    echo "Warning: Playwright browsers not found, will be installed at runtime if needed"
+COPY --from=builder /root/.cache/ms-playwright /home/nextjs/.cache/ms-playwright
+RUN if [ -d "/home/nextjs/.cache/ms-playwright" ] && [ "$(ls -A /home/nextjs/.cache/ms-playwright 2>/dev/null)" ]; then \
+        echo "✓ Playwright browsers copied successfully"; \
+    else \
+        echo "⚠ Warning: Playwright browsers directory is empty, will be installed at runtime if needed"; \
+    fi && \
+    chown -R nextjs:nodejs /home/nextjs/.cache
 
 # Copy Prisma schema for migrations (if needed)
 COPY --from=builder /app/prisma ./prisma

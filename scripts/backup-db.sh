@@ -10,10 +10,21 @@ PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 cd "$PROJECT_DIR"
 
-# Load environment variables
-set -a
-source "$PROJECT_DIR/.env.production"
-set +a
+# Load environment variables safely
+if [ -f "$PROJECT_DIR/.env.production" ]; then
+    set -a
+    while IFS= read -r line || [ -n "$line" ]; do
+        [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
+        if [[ "$line" =~ ^[[:space:]]*([A-Za-z_][A-Za-z0-9_]*)=(.*)$ ]]; then
+            key="${BASH_REMATCH[1]}"
+            value="${BASH_REMATCH[2]}"
+            key=$(echo "$key" | xargs)
+            value=$(echo "$value" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' -e 's/^["'\'']//' -e 's/["'\'']$//')
+            [[ -n "$key" ]] && export "$key=$value" 2>/dev/null || true
+        fi
+    done < "$PROJECT_DIR/.env.production"
+    set +a
+fi
 
 # Backup directory
 BACKUP_DIR="$PROJECT_DIR/backups"

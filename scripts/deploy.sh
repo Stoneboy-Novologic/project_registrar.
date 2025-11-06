@@ -27,10 +27,28 @@ if [ ! -f "$PROJECT_DIR/.env.production" ]; then
     fi
 fi
 
-# Load environment variables
-set -a
-source "$PROJECT_DIR/.env.production"
-set +a
+# Load environment variables safely
+# Only process lines that are valid KEY=VALUE pairs
+if [ -f "$PROJECT_DIR/.env.production" ]; then
+    set -a
+    while IFS= read -r line || [ -n "$line" ]; do
+        # Skip empty lines and comments
+        [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
+        # Only process lines with KEY=VALUE format
+        if [[ "$line" =~ ^[[:space:]]*([A-Za-z_][A-Za-z0-9_]*)=(.*)$ ]]; then
+            key="${BASH_REMATCH[1]}"
+            value="${BASH_REMATCH[2]}"
+            # Remove leading/trailing whitespace
+            key=$(echo "$key" | xargs)
+            value=$(echo "$value" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' -e 's/^["'\'']//' -e 's/["'\'']$//')
+            # Export only if key is valid
+            [[ -n "$key" ]] && export "$key=$value" 2>/dev/null || true
+        fi
+    done < "$PROJECT_DIR/.env.production"
+    set +a
+else
+    echo "Warning: .env.production not found"
+fi
 
 # Check if Docker is running
 if ! docker info > /dev/null 2>&1; then
